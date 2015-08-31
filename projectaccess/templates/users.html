@@ -1,25 +1,35 @@
 
-<table>
+{% extends "base.html" %}
 
-  <thead>
-  
-    <tr>
-	  <td>Id</td>
-	  <td>Name</td>
-	  <td>Email</td>
-	</tr>
-	
-  </thead>
-  
-  <tbody>
-    {% for user in users %}
-	  <tr>
-	    <td>{{user.id}}</td>
-	    <td>{{user.name}}</td>
-	    <td>{{user.email}}</td>
-	  </tr>
-	{% endfor %}
-  
-  </tbody>
+{% block content %}
 
-</table>
+<div class="container">
+
+    <table class="table">
+
+        <thead>
+
+            <tr>
+                <td>Id</td>
+                <td>Name</td>
+                <td>Email</td>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            {% for user in users %}
+                <tr>
+                    <td>{{user.id}}</td>
+                    <td>{{user.name}}</td>
+                    <td>{{user.email}}</td>
+                </tr>
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+{% endblock %}

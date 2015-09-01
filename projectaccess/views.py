@@ -6,11 +6,6 @@ from P4 import P4, P4Exception
 
 import ldap
 
-#LDAP user format:
-# cn: Firstname Lastname
-# uid: login name
-# mail: email address
-
 class p4_connection():
     def __enter__(self):
         p4 = P4()                        # Create the P4 instance
@@ -23,18 +18,6 @@ class p4_connection():
 
     def __exit__(self, type, value, traceback):
         self.p4.disconnect()
-
-def get_users_from_ldap():
-    con = ldap.initialize('ldap://localhost')
-    con.simple_bind_s()
-    con.whoami_s()
-
-    base_dn='dc=example,dc=com'
-    filter='(objectclass=person)'
-    attrs=['uid', 'mail', 'cn']
-
-    people = con.search_s( base_dn, ldap.SCOPE_SUBTREE, filter, attrs )
-    return people
 
 def get_users_from_p4():
     with p4_connection() as p4:
@@ -87,10 +70,11 @@ def combine_users(ldap_users, p4_users):
 
 def index(request):
 
-    ldap_users = get_users_from_ldap()
-    p4_users = get_users_from_p4()
+    from updateldap import updateldap
 
-    combined_users = combine_users(ldap_users, p4_users)
+    updateldap()
+
+    p4_users = get_users_from_p4()
 
     users = generate_random_users(10)
     template = loader.get_template('users.html')

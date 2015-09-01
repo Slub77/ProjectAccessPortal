@@ -10,9 +10,8 @@
         <thead>
 
             <tr>
-                <td>Id</td>
-                <td>Name</td>
-                <td>Email</td>
+                <td>LDAP user</td>
+                <td>P4 user</td>
             </tr>
 
         </thead>
@@ -21,9 +20,8 @@
 
             {% for user in users %}
                 <tr>
-                    <td>{{user.id}}</td>
-                    <td>{{user.name}}</td>
-                    <td>{{user.email}}</td>
+                    <td> {% if user.ldap_user %} {{ user.ldap_user.dn }} {% endif %} <td>
+                    <td> {% if user.p4_user %} {{ user.p4_user.user }} {% endif %} <td>
                 </tr>
             {% endfor %}
 

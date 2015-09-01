@@ -47,3 +47,25 @@ class P4User(models.Model):
 	user = models.CharField("User", max_length=1024)			# example: rdaugherty
 	email = models.CharField("E-Mail", max_length=1024)			# example: rdaugherty@example.com
 	full_name = models.CharField("Full Name", max_length=1024)	# example: Robert Daugherty
+
+
+class MetaUser(models.Model):
+	ldap_user = models.ForeignKey(LDAPUser, null=True)
+	p4_user = models.ForeignKey(P4User, null=True)
+
+	@staticmethod
+	def hash(ldap_user, p4_user):
+		if ldap_user:
+			ldap_user_dn = ldap_user.dn
+		else:
+			ldap_user_dn = "None"
+
+		if p4_user:
+			p4_user_user = p4_user.user
+		else:
+			p4_user_user = "None"
+
+		return "(%s, %s)" % (ldap_user_dn, p4_user_user)
+
+	def __str__(self):
+		return MetaUser.hash(self.ldap_user, self.p4_user)

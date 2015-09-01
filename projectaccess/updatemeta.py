@@ -22,16 +22,24 @@ def construct_meta_users_from_real_users():
     for p4_user in P4User.objects.all():
         remaining_p4_users[p4_user.user] = True
 
+    ldap_users_used = {}
+    p4_users_used = {}
     for ldap_user_dn in remaining_ldap_users:
         ldap_user = LDAPUser.objects.get(dn=ldap_user_dn)
 
         try:
             p4_user=P4User.objects.get(user=ldap_user.uid)
             meta_users.append((ldap_user, p4_user))
-            del remaining_p4_users[p4_user.user]
-            del remaining_ldap_users[ldap_user.dn]
+            ldap_users_used[ldap_user.dn] = True
+            p4_users_used[p4_user.user] = True
         except:
             pass
+
+    for ldap_user_dn in ldap_users_used:
+        del remaining_ldap_users[ldap_user_dn]
+
+    for p4_user_user in p4_users_used:
+        del remaining_p4_users[p4_user_user]
 
     for ldap_user_dn in remaining_ldap_users:
         ldap_user = LDAPUser.objects.get(dn=ldap_user_dn)

@@ -32,3 +32,18 @@ class LDAPUser(models.Model):
 	uid = models.CharField("User ID", max_length=256)		# uid: rdaugherty
 	cn = models.CharField("Canonical Name", max_length=1024)	# cn: Robert Daugherty
 	mail = models.CharField("E-Mail", max_length=1024)		# mail: rdaugherty@example.com
+
+
+# Example of a P4 user specification
+#
+# User: rdaugherty
+#
+# Email: rdaugherty@example.com
+#
+# FullName: Robeert Daugherty
+
+
+class P4User(models.Model):
+	user = models.CharField("User", max_length=1024)			# example: rdaugherty
+	email = models.CharField("E-Mail", max_length=1024)			# example: rdaugherty@example.com
+	full_name = models.CharField("Full Name", max_length=1024)	# example: Robert Daugherty

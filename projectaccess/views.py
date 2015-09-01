@@ -6,24 +6,6 @@ from P4 import P4, P4Exception
 
 import ldap
 
-class p4_connection():
-    def __enter__(self):
-        p4 = P4()                        # Create the P4 instance
-        self.p4 = p4
-        p4.host = "localhost"
-        p4.port = "1666"
-        p4.user = "kalms"
-        p4.connect()                   # Connect to the Perforce server
-        return p4
-
-    def __exit__(self, type, value, traceback):
-        self.p4.disconnect()
-
-def get_users_from_p4():
-    with p4_connection() as p4:
-        users = p4.run("users")
-    return users
-
 def generate_random_users(count):
 
     def generate_random_user():
@@ -71,10 +53,10 @@ def combine_users(ldap_users, p4_users):
 def index(request):
 
     from updateldap import updateldap
-
     updateldap()
 
-    p4_users = get_users_from_p4()
+    from updatep4 import updatep4
+    updatep4()
 
     users = generate_random_users(10)
     template = loader.get_template('users.html')

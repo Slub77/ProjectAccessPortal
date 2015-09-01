@@ -70,6 +70,22 @@ def create_missing_p4_users():
                 if not meta_user.p4_user:
                     setup_student_in_p4(p4, meta_user.ldap_user.uid, meta_user.ldap_user.mail, meta_user.ldap_user.cn)
 
+def update_p4_protect_for_users():
+
+    with P4Connection('localhost', '1666', 'kalms') as p4:
+
+        protections = p4.read_protect()
+        from models import MetaUser
+        for meta_user in MetaUser.objects.all():
+            if meta_user.ldap_user and meta_user.p4_user:
+                p4_user = meta_user.p4_user
+                protect_line = str('write user %s * //Users/%s/...' % (p4_user.user, p4_user.user))
+                if not protect_line in protections:
+                    protections.append(protect_line)
+        print protections
+        p4.write_protect(protections)
+
+
 def setup_student_in_p4(p4, login, email, fullname):
 
         p4.create_user(login, email, fullname)

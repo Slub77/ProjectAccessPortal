@@ -27,10 +27,13 @@ def update(request):
 
     return index(request)
 
-def create_p4(request):
+def update_p4(request):
 
     from updatep4 import create_missing_p4_users
     create_missing_p4_users()
+
+    from updatep4 import update_p4_protect_for_users
+    update_p4_protect_for_users()
 
     return index(request)
 

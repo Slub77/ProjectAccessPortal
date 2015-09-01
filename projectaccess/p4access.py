@@ -89,6 +89,14 @@ class P4Connection():
             self.delete_workspace(workspace_name)
             raise
 
+    def read_protect(self):
+        protections = self.p4.run_protect('-o')
+        return protections[0]['Protections']
+
+    def write_protect(self, protections):
+        self.p4.save_protect([{'Protections': protections}])
+
+
 class p4_workspace():
 
     def __init__(self, p4, workspace):
@@ -142,6 +150,24 @@ class TestP4Methods(unittest.TestCase):
             except:
                 p4.delete_depot(self.DEPOT_NAME)
                 raise
+
+    def test_p4_protect(self):
+        with P4Connection(self.P4HOST, self.P4PORT, self.P4USER) as p4:
+
+            protect_line = "write user %s * //..." % self.USER_NAME
+
+            protections = p4.read_protect()
+
+            protections2 = protections + [protect_line]
+            p4.write_protect(protections2)
+
+            protections3 = p4.read_protect()
+            self.assertIn(protect_line, protections3)
+
+            p4.write_protect(protections)
+
+            protections4 = p4.read_protect()
+            self.assertNotIn(protect_line, protections4)
 
 if __name__ == '__main__':
     unittest.main()

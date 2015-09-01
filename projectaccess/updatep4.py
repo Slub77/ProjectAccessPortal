@@ -27,10 +27,14 @@ def update_p4_users(new_p4_users):
             user = new_p4_user['User']
             try:
                 old_p4_user = P4User.objects.get(user=user)
-                logger.info("Updating Django model for P4 user " + user)
-                old_p4_user.email = new_p4_user_details['Email']
-                old_p4_user.full_name = new_p4_user_details['FullName']
-                old_p4_user.save()
+
+                if (old_p4_user.email != new_p4_user_details['Email'] \
+                    or old_p4_user.full_name != new_p4_user_details['FullName']):
+
+                    logger.info("Updating Django model for P4 user " + user)
+                    old_p4_user.email = new_p4_user_details['Email']
+                    old_p4_user.full_name = new_p4_user_details['FullName']
+                    old_p4_user.save()
             except:
                 pass
 

@@ -25,11 +25,16 @@ def update_django_users(new_ldap_users):
         for (new_ldap_user_dn, new_ldap_user_details) in new_ldap_users:
             try:
                 old_ldap_user = LDAPUser.objects.get(dn=new_ldap_user_dn)
-                logger.info("Updating Django model for LDAP user " + new_ldap_user_dn)
-                old_ldap_user.cn = new_ldap_user_details['cn']
-                old_ldap_user.uid = new_ldap_user_details['uid']
-                old_ldap_user.mail = new_ldap_user_details['mail']
-                old_ldap_user.save()
+
+                if (old_ldap_user.cn != new_ldap_user_details['cn'][0] \
+                    or old_ldap_user.uid != new_ldap_user_details['uid'][0] \
+                    or old_ldap_user.mail != new_ldap_user_details['mail'][0]):
+
+                    logger.info("Updating Django model for LDAP user " + new_ldap_user_dn)
+                    old_ldap_user.cn = new_ldap_user_details['cn'][0]
+                    old_ldap_user.uid = new_ldap_user_details['uid'][0]
+                    old_ldap_user.mail = new_ldap_user_details['mail'][0]
+                    old_ldap_user.save()
             except:
                 pass
 

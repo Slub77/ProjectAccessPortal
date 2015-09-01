@@ -1,0 +1,12 @@
+Perforce server from www.perforce.com
+
+
+Install OpenLDAP server for Windows from http://www.userbooster.de/en/download/openldap-for-windows.aspx
+
+Edit OpenLDAP\slapd.conf, update the following two lines:
+suffix		"dc=example,dc=com"
+rootdn		"cn=Manager,dc=example,dc=com"
+
+Run tests\ldap\import_data.bat
+
+Run tests\ldap\show_users.bat

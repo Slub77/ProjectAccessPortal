@@ -1,5 +1,5 @@
 
-from p4access import p4_get_users
+from p4access import P4Connection
 from models import P4User
 
 import logging
@@ -54,7 +54,27 @@ def update_p4_users(new_p4_users):
 
 
 def updatep4():
-#    clear_p4_users()
+    clear_p4_users()
 
-    current_p4_users = p4_get_users()
+    with P4Connection('localhost', '1666', 'kalms') as p4:
+        current_p4_users = p4.get_users()
     update_p4_users(current_p4_users)
+
+def create_missing_p4_users():
+
+    with P4Connection('localhost', '1666', 'kalms') as p4:
+
+        from models import MetaUser
+        for meta_user in MetaUser.objects.all():
+            if meta_user.ldap_user:
+                if not meta_user.p4_user:
+                    setup_student_in_p4(p4, meta_user.ldap_user.uid, meta_user.ldap_user.mail, meta_user.ldap_user.cn)
+
+def setup_student_in_p4(p4, login, email, fullname):
+
+        p4.create_user(login, email, fullname)
+
+        welcome_local_file = 'static/welcome.txt'
+        welcome_depot_file = '//Users/%s/welcome.txt' % login
+        p4.import_local_file(welcome_local_file, welcome_depot_file, 'Setting up things for %s' % login)
+

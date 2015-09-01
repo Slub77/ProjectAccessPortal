@@ -8,6 +8,14 @@ from models import MetaUser
 
 def index(request):
 
+    template = loader.get_template('users.html')
+    context = RequestContext(request, {
+        'users': MetaUser.objects.all(),
+    })
+    return HttpResponse(template.render(context))
+
+def update(request):
+
     from updateldap import updateldap
     updateldap()
 
@@ -17,8 +25,12 @@ def index(request):
     from updatemeta import updatemeta
     updatemeta()
 
-    template = loader.get_template('users.html')
-    context = RequestContext(request, {
-        'users': MetaUser.objects.all(),
-    })
-    return HttpResponse(template.render(context))
+    return index(request)
+
+def create_p4(request):
+
+    from updatep4 import create_missing_p4_users
+    create_missing_p4_users()
+
+    return index(request)
+

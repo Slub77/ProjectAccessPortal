@@ -54,7 +54,7 @@ def update_django_users(new_ldap_users):
 
 
 def updateldap():
-    clear_django_users()
+#    clear_django_users()
 
     current_ldap_users = retrieve_ldap_users()
     update_django_users(current_ldap_users)

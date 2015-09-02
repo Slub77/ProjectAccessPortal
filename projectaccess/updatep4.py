@@ -139,7 +139,7 @@ def update_p4_groups(new_p4_groups):
     update_membership(new_p4_groups)
 
 def updatep4():
-    clear_p4_users()
+#    clear_p4_users()
 
     with P4Connection('localhost', '1666', 'kalms') as p4:
         current_p4_users = p4.get_users()

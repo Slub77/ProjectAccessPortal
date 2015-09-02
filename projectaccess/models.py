@@ -75,3 +75,11 @@ class P4Group(models.Model):
 
 	member_users = models.ManyToManyField(P4User)
 	member_subgroups = models.ManyToManyField('P4Group')
+
+class MetaProject(models.Model):
+	p4_group = models.OneToOneField(P4Group, null=True)
+
+	block = models.CharField("Block", max_length=128)
+	name = models.CharField("Name", max_length=1024)
+
+	members = models.ManyToManyField(MetaUser)

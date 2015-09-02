@@ -96,6 +96,23 @@ class P4Connection():
     def write_protect(self, protections):
         self.p4.save_protect([{'Protections': protections}])
 
+    def get_groups(self):
+        return self.p4.run_groups()
+
+    def read_group_members(self, name):
+        group = self.p4.run_group("-o", name)
+        if 'Users' in group[0]:
+            return group[0]['Users']
+        else:
+            return []
+
+    def write_group_members(self, name, users):
+        group = self.p4.run_group("-o", name)
+        group[0]['Users'] = users
+        self.p4.save_group(group)
+
+    def delete_group(self, name):
+        self.p4.run_group("-d", name)
 
 class p4_workspace():
 
@@ -120,6 +137,10 @@ class TestP4Methods(unittest.TestCase):
     DEPOT_NAME = 'unittest_test_depot'
     USER_NAME = 'unittest_test_user'
     WORKSPACE_NAME = 'unittest_test_workspace'
+    GROUP_NAME = 'unittest_test_group'
+
+    USER_EMAIL = USER_NAME + '@example.com'
+    USER_FULL_NAME = 'Unittest Test User'
 
     def test_get_users(self):
         with P4Connection(self.P4HOST, self.P4PORT, self.P4USER) as p4:
@@ -127,7 +148,7 @@ class TestP4Methods(unittest.TestCase):
 
     def test_p4_create_and_delete_user(self):
         with P4Connection(self.P4HOST, self.P4PORT, self.P4USER) as p4:
-            p4.create_user(self.USER_NAME, self.USER_NAME + "@example.com", "Unittest Test user")
+            p4.create_user(self.USER_NAME, self.USER_EMAIL, self.USER_FULL_NAME)
             p4.delete_user(self.USER_NAME)
 
     def test_p4_create_and_delete_workspace(self):
@@ -168,6 +189,41 @@ class TestP4Methods(unittest.TestCase):
 
             protections4 = p4.read_protect()
             self.assertNotIn(protect_line, protections4)
+
+    def test_p4_groups(self):
+
+        with P4Connection(self.P4HOST, self.P4PORT, self.P4USER) as p4:
+
+            p4.create_user(self.USER_NAME, self.USER_EMAIL, self.USER_FULL_NAME)
+            try:
+                try:
+                    group_members1 = p4.read_group_members(self.GROUP_NAME)
+                    self.assertFalse(group_members1)
+
+                    p4.write_group_members(self.GROUP_NAME, [self.USER_NAME])
+                    group_members2 = p4.read_group_members(self.GROUP_NAME)
+                    self.assertIn(self.USER_NAME, group_members2)
+
+                    p4.write_group_members(self.GROUP_NAME, [])
+                    group_members3 = p4.read_group_members(self.GROUP_NAME)
+                    self.assertFalse(group_members3)
+
+                    p4.write_group_members(self.GROUP_NAME, [self.USER_NAME])
+                    group_members4 = p4.read_group_members(self.GROUP_NAME)
+                    self.assertIn(self.USER_NAME, group_members4)
+
+                    p4.delete_group(self.GROUP_NAME)
+                    group_members5 = p4.read_group_members(self.GROUP_NAME)
+                    self.assertFalse(group_members5)
+                except:
+                    p4.delete_group(self.GROUP_NAME)
+                    raise
+
+                p4.delete_user(self.USER_NAME)
+            except:
+                p4.delete_user(self.USER_NAME)
+                raise
+
 
 if __name__ == '__main__':
     unittest.main()

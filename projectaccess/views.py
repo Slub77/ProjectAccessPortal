@@ -4,7 +4,7 @@ from django.template import RequestContext, loader
 import random
 from P4 import P4, P4Exception
 
-from models import MetaUser
+from models import MetaUser, MetaProject
 
 def index(request):
 
@@ -12,6 +12,16 @@ def index(request):
     context = RequestContext(request, {
         'users': MetaUser.objects.all(),
     })
+
+    return HttpResponse(template.render(context))
+
+def projects(request):
+
+    template = loader.get_template('projects.html')
+    context = RequestContext(request, {
+        'projects': MetaProject.objects.all(),
+    })
+
     return HttpResponse(template.render(context))
 
 def update(request):

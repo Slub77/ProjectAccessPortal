@@ -50,8 +50,8 @@ class P4User(models.Model):
 
 
 class MetaUser(models.Model):
-	ldap_user = models.ForeignKey(LDAPUser, null=True)
-	p4_user = models.ForeignKey(P4User, null=True)
+	ldap_user = models.OneToOneField(LDAPUser, null=True)
+	p4_user = models.OneToOneField(P4User, null=True)
 
 	@staticmethod
 	def hash(ldap_user, p4_user):

@@ -57,8 +57,6 @@ def update_meta_users():
 
     new_meta_users = construct_meta_users_from_real_users()
 
-    logger.info(str(len(new_meta_users)))
-
     def create(new_meta_users):
         for (ldap_user, p4_user) in new_meta_users:
 

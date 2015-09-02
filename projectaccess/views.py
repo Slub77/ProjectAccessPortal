@@ -1,12 +1,17 @@
+
 from django.http import HttpResponse
 from django.template import RequestContext, loader
-
-import random
-from P4 import P4, P4Exception
 
 from models import MetaUser, MetaProject
 
 def index(request):
+
+    template = loader.get_template('index.html')
+    context = RequestContext(request)
+
+    return HttpResponse(template.render(context))
+
+def users(request):
 
     template = loader.get_template('users.html')
     context = RequestContext(request, {
@@ -24,29 +29,28 @@ def projects(request):
 
     return HttpResponse(template.render(context))
 
-def update(request):
+def import_users_and_projects(request):
 
-    from updateldap import updateldap
-    updateldap()
+    from ldap_import import import_ldap_users_to_django
+    import_ldap_users_to_django()
 
-    from updatep4 import updatep4
-    updatep4()
+    from p4_import import import_p4_to_django
+    import_p4_to_django()
 
-    from updatemeta import updatemeta
-    updatemeta()
+    from meta_update import update_all_meta_users_and_projects
+    update_all_meta_users_and_projects()
 
     return index(request)
 
 def update_p4(request):
 
-    from updatep4 import create_default_project_user
+    from p4_modify import create_default_project_user
     create_default_project_user()
 
-    from updatep4 import create_missing_p4_users
+    from p4_modify import create_missing_p4_users
     create_missing_p4_users()
 
-    from updatep4 import update_p4_protect_for_users
+    from p4_modify import update_p4_protect_for_users
     update_p4_protect_for_users()
 
     return index(request)
-

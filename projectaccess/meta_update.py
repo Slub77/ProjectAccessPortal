@@ -161,7 +161,7 @@ def update_meta_projects():
 def clear_meta_projects():
     MetaProject.objects.all().delete()
 
-def updatemeta():
+def update_all_meta_users_and_projects():
 #    clear_meta_users()
 #    clear_meta_projects()
 

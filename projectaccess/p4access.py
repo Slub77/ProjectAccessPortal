@@ -114,6 +114,17 @@ class P4Connection():
     def delete_group(self, name):
         self.p4.run_group("-d", name)
 
+    def add_user_to_group(self, group, user):
+        members = self.read_group_members(group)
+        if not user in members:
+            self.write_group_members(group, members + [user])
+
+    def remove_user_from_group(self, group, user):
+        members = self.read_group_members(group)
+        if user in members:
+            members.remove(user)
+            self.write_group_members(group, members)
+
 class p4_workspace():
 
     def __init__(self, p4, workspace):
@@ -190,7 +201,7 @@ class TestP4Methods(unittest.TestCase):
             protections4 = p4.read_protect()
             self.assertNotIn(protect_line, protections4)
 
-    def test_p4_groups(self):
+    def test_p4_groups_1(self):
 
         with P4Connection(self.P4HOST, self.P4PORT, self.P4USER) as p4:
 
@@ -224,6 +235,36 @@ class TestP4Methods(unittest.TestCase):
                 p4.delete_user(self.USER_NAME)
                 raise
 
+    def test_p4_groups_2(self):
+
+        with P4Connection(self.P4HOST, self.P4PORT, self.P4USER) as p4:
+
+            p4.create_user(self.USER_NAME, self.USER_EMAIL, self.USER_FULL_NAME)
+            try:
+                try:
+                    group_members1 = p4.read_group_members(self.GROUP_NAME)
+                    self.assertFalse(group_members1)
+
+                    p4.add_user_to_group(self.GROUP_NAME, self.USER_NAME)
+                    self.assertIn(self.USER_NAME, p4.read_group_members(self.GROUP_NAME))
+
+                    p4.add_user_to_group(self.GROUP_NAME, self.USER_NAME)
+                    self.assertIn(self.USER_NAME, p4.read_group_members(self.GROUP_NAME))
+
+                    p4.remove_user_from_group(self.GROUP_NAME, self.USER_NAME)
+                    self.assertNotIn(self.USER_NAME, p4.read_group_members(self.GROUP_NAME))
+
+                    p4.remove_user_from_group(self.GROUP_NAME, self.USER_NAME)
+                    self.assertNotIn(self.USER_NAME, p4.read_group_members(self.GROUP_NAME))
+
+                except:
+                    p4.delete_group(self.GROUP_NAME)
+                    raise
+
+                p4.delete_user(self.USER_NAME)
+            except:
+                p4.delete_user(self.USER_NAME)
+                raise
 
 if __name__ == '__main__':
     unittest.main()

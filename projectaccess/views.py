@@ -29,6 +29,9 @@ def update(request):
 
 def update_p4(request):
 
+    from updatep4 import create_default_project_user
+    create_default_project_user()
+
     from updatep4 import create_missing_p4_users
     create_missing_p4_users()
 

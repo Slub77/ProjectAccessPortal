@@ -237,6 +237,12 @@ class TestP4Methods(unittest.TestCase):
 
     def test_p4_groups_2(self):
 
+        import os
+        for root, dirs, files in os.walk('WorkspaceTemplates/NewUser/'):
+            print "Root: " + root
+            for file in files:
+                print "File: " + file
+
         with P4Connection(self.P4HOST, self.P4PORT, self.P4USER) as p4:
 
             p4.create_user(self.USER_NAME, self.USER_EMAIL, self.USER_FULL_NAME)

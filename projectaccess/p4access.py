@@ -101,29 +101,49 @@ class P4Connection():
 
     def read_group_members(self, name):
         group = self.p4.run_group("-o", name)
-        if 'Users' in group[0]:
-            return group[0]['Users']
-        else:
-            return []
 
-    def write_group_members(self, name, users):
+        if 'Users' in group[0]:
+            users = group[0]['Users']
+        else:
+            users = []
+
+        if 'Subgroups' in group[0]:
+            subgroups = group[0]['Subgroups']
+        else:
+            subgroups = []
+
+        return (users, subgroups)
+
+    def write_group_members(self, name, users, subgroups):
         group = self.p4.run_group("-o", name)
         group[0]['Users'] = users
+        group[0]['Subgroups'] = subgroups
         self.p4.save_group(group)
 
     def delete_group(self, name):
         self.p4.run_group("-d", name)
 
     def add_user_to_group(self, group, user):
-        members = self.read_group_members(group)
-        if not user in members:
-            self.write_group_members(group, members + [user])
+        (users, subgroups) = self.read_group_members(group)
+        if not user in users:
+            self.write_group_members(group, users + [user], subgroups)
 
     def remove_user_from_group(self, group, user):
-        members = self.read_group_members(group)
-        if user in members:
-            members.remove(user)
-            self.write_group_members(group, members)
+        (users, subgroups) = self.read_group_members(group)
+        if user in users:
+            users.remove(user)
+            self.write_group_members(group, users, subgroups)
+
+    def add_subgroup_to_group(self, group, subgroup):
+        (users, subgroups) = self.read_group_members(group)
+        if not subgroup in subgroups:
+            self.write_group_members(group, users, subgroups + [subgroup])
+
+    def remove_subgroup_from_group(self, group, subgroup):
+        (users, subgroups) = self.read_group_members(group)
+        if subgroup in subgroups:
+            subgroups.remove(subgroup)
+            self.write_group_members(group, users, subgroups)
 
 class p4_workspace():
 
@@ -149,6 +169,7 @@ class TestP4Methods(unittest.TestCase):
     USER_NAME = 'unittest_test_user'
     WORKSPACE_NAME = 'unittest_test_workspace'
     GROUP_NAME = 'unittest_test_group'
+    SUBGROUP_NAME = 'unittest_test_subgroup'
 
     USER_EMAIL = USER_NAME + '@example.com'
     USER_FULL_NAME = 'Unittest Test User'
@@ -208,24 +229,24 @@ class TestP4Methods(unittest.TestCase):
             p4.create_user(self.USER_NAME, self.USER_EMAIL, self.USER_FULL_NAME)
             try:
                 try:
-                    group_members1 = p4.read_group_members(self.GROUP_NAME)
-                    self.assertFalse(group_members1)
+                    self.assertFalse(p4.read_group_members(self.GROUP_NAME)[0])
+                    self.assertFalse(p4.read_group_members(self.GROUP_NAME)[1])
 
-                    p4.write_group_members(self.GROUP_NAME, [self.USER_NAME])
-                    group_members2 = p4.read_group_members(self.GROUP_NAME)
-                    self.assertIn(self.USER_NAME, group_members2)
+                    p4.write_group_members(self.GROUP_NAME, [self.USER_NAME], [])
+                    self.assertIn(self.USER_NAME, p4.read_group_members(self.GROUP_NAME)[0])
+                    self.assertFalse(p4.read_group_members(self.GROUP_NAME)[1])
 
-                    p4.write_group_members(self.GROUP_NAME, [])
-                    group_members3 = p4.read_group_members(self.GROUP_NAME)
-                    self.assertFalse(group_members3)
+                    p4.write_group_members(self.GROUP_NAME, [], [])
+                    self.assertFalse(p4.read_group_members(self.GROUP_NAME)[0])
+                    self.assertFalse(p4.read_group_members(self.GROUP_NAME)[1])
 
-                    p4.write_group_members(self.GROUP_NAME, [self.USER_NAME])
-                    group_members4 = p4.read_group_members(self.GROUP_NAME)
-                    self.assertIn(self.USER_NAME, group_members4)
+                    p4.write_group_members(self.GROUP_NAME, [self.USER_NAME], [])
+                    self.assertIn(self.USER_NAME, p4.read_group_members(self.GROUP_NAME)[0])
+                    self.assertFalse(p4.read_group_members(self.GROUP_NAME)[1])
 
                     p4.delete_group(self.GROUP_NAME)
-                    group_members5 = p4.read_group_members(self.GROUP_NAME)
-                    self.assertFalse(group_members5)
+                    self.assertFalse(p4.read_group_members(self.GROUP_NAME)[0])
+                    self.assertFalse(p4.read_group_members(self.GROUP_NAME)[1])
                 except:
                     p4.delete_group(self.GROUP_NAME)
                     raise
@@ -237,39 +258,54 @@ class TestP4Methods(unittest.TestCase):
 
     def test_p4_groups_2(self):
 
-        import os
-        for root, dirs, files in os.walk('WorkspaceTemplates/NewUser/'):
-            print "Root: " + root
-            for file in files:
-                print "File: " + file
-
         with P4Connection(self.P4HOST, self.P4PORT, self.P4USER) as p4:
 
             p4.create_user(self.USER_NAME, self.USER_EMAIL, self.USER_FULL_NAME)
             try:
-                try:
-                    group_members1 = p4.read_group_members(self.GROUP_NAME)
-                    self.assertFalse(group_members1)
+                self.assertFalse(p4.read_group_members(self.GROUP_NAME)[0])
+                self.assertFalse(p4.read_group_members(self.GROUP_NAME)[1])
+                self.assertFalse(p4.read_group_members(self.SUBGROUP_NAME)[0])
+                self.assertFalse(p4.read_group_members(self.SUBGROUP_NAME)[1])
 
-                    p4.add_user_to_group(self.GROUP_NAME, self.USER_NAME)
-                    self.assertIn(self.USER_NAME, p4.read_group_members(self.GROUP_NAME))
+                p4.add_user_to_group(self.SUBGROUP_NAME, self.USER_NAME)
+                self.assertIn(self.USER_NAME, p4.read_group_members(self.SUBGROUP_NAME)[0])
 
-                    p4.add_user_to_group(self.GROUP_NAME, self.USER_NAME)
-                    self.assertIn(self.USER_NAME, p4.read_group_members(self.GROUP_NAME))
+                p4.add_user_to_group(self.GROUP_NAME, self.USER_NAME)
+                self.assertIn(self.USER_NAME, p4.read_group_members(self.GROUP_NAME)[0])
 
-                    p4.remove_user_from_group(self.GROUP_NAME, self.USER_NAME)
-                    self.assertNotIn(self.USER_NAME, p4.read_group_members(self.GROUP_NAME))
+                self.assertIn(self.USER_NAME, p4.read_group_members(self.GROUP_NAME)[0])
+                self.assertFalse(p4.read_group_members(self.GROUP_NAME)[1])
 
-                    p4.remove_user_from_group(self.GROUP_NAME, self.USER_NAME)
-                    self.assertNotIn(self.USER_NAME, p4.read_group_members(self.GROUP_NAME))
+                p4.add_subgroup_to_group(self.GROUP_NAME, self.SUBGROUP_NAME)
+                self.assertIn(self.USER_NAME, p4.read_group_members(self.GROUP_NAME)[0])
+                self.assertIn(self.SUBGROUP_NAME, p4.read_group_members(self.GROUP_NAME)[1])
 
-                except:
-                    p4.delete_group(self.GROUP_NAME)
-                    raise
+                p4.remove_user_from_group(self.GROUP_NAME, self.USER_NAME)
+                self.assertNotIn(self.USER_NAME, p4.read_group_members(self.GROUP_NAME)[0])
+
+                p4.remove_subgroup_from_group(self.GROUP_NAME, self.SUBGROUP_NAME)
+                self.assertNotIn(self.SUBGROUP_NAME, p4.read_group_members(self.GROUP_NAME)[1])
+
+                p4.remove_user_from_group(self.SUBGROUP_NAME, self.USER_NAME)
+                self.assertNotIn(self.USER_NAME, p4.read_group_members(self.SUBGROUP_NAME)[0])
 
                 p4.delete_user(self.USER_NAME)
             except:
-                p4.delete_user(self.USER_NAME)
+                try:
+                    p4.delete_group(self.GROUP_NAME)
+                except:
+                    pass
+
+                try:
+                    p4.delete_group(self.SUBGROUP_NAME)
+                except:
+                    pass
+
+                try:
+                    p4.delete_user(self.USER_NAME)
+                except:
+                    pass
+
                 raise
 
 if __name__ == '__main__':

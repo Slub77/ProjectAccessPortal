@@ -69,3 +69,9 @@ class MetaUser(models.Model):
 
 	def __str__(self):
 		return MetaUser.hash(self.ldap_user, self.p4_user)
+
+class P4Group(models.Model):
+	name = models.CharField("Group", max_length=1024)
+
+	member_users = models.ManyToManyField(P4User)
+	member_subgroups = models.ManyToManyField('P4Group')

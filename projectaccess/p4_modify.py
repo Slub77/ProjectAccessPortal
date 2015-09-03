@@ -50,6 +50,29 @@ def update_p4_protect_for_users():
 
         p4.write_protect(protections)
 
+def generate_protect_lines_for_project(project_block, project_name, p4_group_name):
+    protect_lines = [
+            str('write group %s * //Projects/%s/%s/...' % (p4_group_name, project_block, project_name)),
+            str('write group %s * //Projects/%s/%s/...' % ('Staff', project_block, project_name)),
+        ]
+    return protect_lines
+
+def update_p4_protect_for_projects():
+
+    with P4Connection('localhost', '1666', 'kalms') as p4:
+
+        protections = p4.read_protect()
+        from models import MetaProject
+        for meta_project in MetaProject.objects.all():
+            if meta_project.p4_group:
+
+                group_protect_lines = generate_protect_lines_for_project(meta_project.block, meta_project.name, meta_project.p4_group.name)
+
+                for group_protect_line in group_protect_lines:
+                    if not group_protect_line in protections:
+                        protections.append(group_protect_line)
+
+        p4.write_protect(protections)
 
 def create_student_user_in_p4(p4, login, email, fullname):
 
@@ -58,6 +81,10 @@ def create_student_user_in_p4(p4, login, email, fullname):
         p4.add_user_to_group('Students', login)
 
 def create_student_standard_files_in_p4(p4, user):
+
+        # TODO: fix slash handling, right now it only supports files in 1 level of subdirs essentially
+        # TODO: merge with create-standard-files for project
+        # TODO: import all files with one single changelist
 
         local_prefix = 'WorkspaceTemplates/NewUser/'
         depot_prefix = '//Users/%s/' % user
@@ -89,3 +116,21 @@ def setup_student_in_p4(p4, login, email, fullname):
     create_student_user_in_p4(p4, login, email, fullname)
     create_student_standard_files_in_p4(p4, login)
     create_protect_lines_for_user_in_p4(p4, login)
+
+def create_project_standard_files_in_p4(p4, project_root):
+
+        # TODO: make slash handling correct, required for supporting subdirectories
+
+        local_prefix = 'WorkspaceTemplates/NewProject/'
+        depot_prefix = project_root
+
+        for root, dirs, files in os.walk(local_prefix):
+            for file in files:
+                file_with_local_prefix = root + file
+                print file_with_local_prefix
+                file_without_local_prefix = file_with_local_prefix[len(local_prefix):]
+                local_file = local_prefix + file_without_local_prefix
+                depot_file = depot_prefix + file_without_local_prefix
+                if not p4.file_exists(depot_file):
+                    p4.import_local_file(local_file, depot_file, 'Setting up project-area in %s' % project_root)
+

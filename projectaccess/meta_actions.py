@@ -1,6 +1,8 @@
 
 from P4Connection import P4Connection
 
+from p4_modify import update_p4_protect_for_projects, create_project_standard_files_in_p4
+
 from models import P4Group, MetaProject
 
 def add_user_to_project(meta_project, meta_user):
@@ -26,13 +28,17 @@ def remove_user_from_project(meta_project, meta_user):
 def create_new_project(project_block, project_name):
 
     p4_group_name = 'Project-%s-%s' % (project_block, project_name)
+    p4_project_root = '//Projects/%s/%s/' % (project_block, project_name)
 
     with P4Connection('localhost', '1666', 'kalms') as p4:
         # Add default project user to group in P4
         p4.add_user_to_group(p4_group_name, 'default_project_user')
 
         # Update protections
+        update_p4_protect_for_projects()
         # If no manual checkins have been made, create starter file structure
+        if not p4.file_exists(p4_project_root + '...'):
+            create_project_standard_files_in_p4(p4, p4_project_root)
         # Create workspace template
         # Add group to P4Groups
         p4_group = P4Group.objects.create(name=p4_group_name)
@@ -47,6 +53,7 @@ def delete_project(meta_project):
         # Delete group in P4
         p4.delete_group(meta_project.p4_group.name)
         # Update protections
+        update_p4_protect_for_projects()
         # Delete workspace template
         # If "force", delete project content in P4
         # Delete P4Group

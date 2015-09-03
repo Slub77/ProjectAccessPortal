@@ -2,7 +2,9 @@
 from django.http import HttpResponse
 from django.template import RequestContext, loader
 
-from models import MetaUser, MetaProject
+from models import LDAPUser, MetaUser, MetaProject
+from meta_actions import add_user_to_project
+
 
 def index(request):
 
@@ -21,6 +23,14 @@ def users(request):
     return HttpResponse(template.render(context))
 
 def projects(request):
+
+    if request.method == 'POST':
+        project_id = request.POST['project_id']
+        user_name = request.POST['user_name']
+        ldap_user = LDAPUser.objects.get(uid=user_name)
+        meta_user = MetaUser.objects.get(ldap_user=ldap_user)
+        meta_project = MetaProject.objects.get(id=project_id)
+        add_user_to_project(meta_project, meta_user)
 
     template = loader.get_template('projects.html')
     context = RequestContext(request, {

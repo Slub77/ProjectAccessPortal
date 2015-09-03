@@ -36,6 +36,16 @@
 
             </table>
 
+            <form action="{% url 'projectaccess:projects' %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="user_name">Add user to project</label>
+                    <input type="hidden" name="project_id" value="{{project.id}}">
+                    <input type="text" class="form-control" id="user_name" placeholder="Enter user LDAP uid here" name="user_name">
+                    <button type="submit" class="btn btn-default">Add</button>
+                </div>
+            </form>
+
         </div>
 
     {% endfor %}

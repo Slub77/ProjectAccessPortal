@@ -134,8 +134,16 @@ def update_meta_projects():
 
                 return modified
 
+            def update_p4_group(meta_project, p4_project_group):
+                if meta_project.p4_group != p4_project_group:
+                    meta_project.p4_group = p4_project_group
+                    return True
+                else:
+                    return False
+
             modified = add_users(meta_project, p4_project_group)
             modified = modified or remove_users(meta_project, p4_project_group)
+            modified = modified or update_p4_group(meta_project, p4_project_group)
 
             if modified:
                 logger.info("Updating Django model for meta project %s - %s" % (project_block, project_name))

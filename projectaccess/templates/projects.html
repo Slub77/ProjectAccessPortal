@@ -7,29 +7,36 @@
 
     {% for project in projects %}
 
-        <h1>Project: {{ project.block }} - {{ project.name }} <a href="{% url 'projectaccess:delete_project' project.id %}"/>Delete</a></h1>
+        <div style="border: 2px solid black">
 
-        <table class="table">
+            <div class="row">
+                <div class="col-md-8"><h1>Project: {{ project.block }} - {{ project.name }}</h1></div>
+                <div class="col-md-4"><h1><a href="{% url 'projectaccess:delete_project' project.id %}"/>Delete</a></h1></div>
+            </div>
 
-            <thead>
-                <tr>
-                    <td>Member's LDAP name</td>
-                    <td>Member's P4 user</td>
-                </tr>
-            </thead>
+            <table class="table">
 
-            <tbody>
-
-                {% for user in project.members.all %}
+                <thead>
                     <tr>
-                        <td> {% if user.ldap_user %} {{ user.ldap_user.dn }} {% endif %} <td>
-                        <td> {% if user.p4_user %} {{ user.p4_user.user }} {% endif %} <td>
+                        <td>Member's LDAP name</td>
+                        <td>Member's P4 user</td>
                     </tr>
-                {% endfor %}
+                </thead>
 
-            </tbody>
+                <tbody>
 
-        </table>
+                    {% for user in project.members.all %}
+                        <tr>
+                            <td> {% if user.ldap_user %} {{ user.ldap_user.dn }} {% endif %} <td>
+                            <td> {% if user.p4_user %} {{ user.p4_user.user }} {% endif %} <td>
+                        </tr>
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
 
     {% endfor %}
 

@@ -34,8 +34,6 @@ def create_new_project(project_block, project_name):
         # Add default project user to group in P4
         p4.add_user_to_group(p4_group_name, 'default_project_user')
 
-        # Update protections
-        update_p4_protect_for_projects()
         # If no manual checkins have been made, create starter file structure
         if not p4.file_exists(p4_project_root + '...'):
             create_project_standard_files_in_p4(p4, p4_project_root)
@@ -44,6 +42,12 @@ def create_new_project(project_block, project_name):
         p4_group = P4Group.objects.create(name=p4_group_name)
         # Create MetaProject; Add P4Group to MetaProject
         meta_project = MetaProject.objects.create(block=project_block, name=project_name, p4_group=p4_group)
+
+        # Update protections
+        # NOTE: must happen after meta project has been configured;
+        # TODO: make this not depend on MetaProjects?
+        update_p4_protect_for_projects()
+
         # Return MetaProject
         return meta_project
 

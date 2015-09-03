@@ -36,10 +36,8 @@ def create_new_project(project_block, project_name):
         # Create workspace template
         # Add group to P4Groups
         p4_group = P4Group.objects.create(name=p4_group_name)
-        # Create MetaProject
-        meta_project = MetaProject.objects.create(block=project_block, name=project_name)
-        # Add P4Group to MetaProject
-        meta_project.p4_group = p4_group
+        # Create MetaProject; Add P4Group to MetaProject
+        meta_project = MetaProject.objects.create(block=project_block, name=project_name, p4_group=p4_group)
         # Return MetaProject
         return meta_project
 
@@ -52,8 +50,8 @@ def delete_project(meta_project):
         # Delete workspace template
         # If "force", delete project content in P4
         # Delete P4Group
-        meta_project.p4_group.remove()
+        meta_project.p4_group.delete()
         # Delete MetaProject
-        meta_project.remove()
+        meta_project.delete()
 
     pass

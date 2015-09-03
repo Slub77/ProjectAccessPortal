@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^update_p4/$', views.update_p4, name='update_p4'),
     url(r'^create_new_project/$', views.create_new_project, name='create_new_project'),
     url(r'^create_new_project_submit/$', views.create_new_project_submit, name='create_new_project_submit'),
+    url(r'^(?P<id>[0-9]+)/delete_project/$', views.delete_project, name='delete_project'),
 ]

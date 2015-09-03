@@ -72,3 +72,10 @@ def create_new_project_submit(request):
 
     return HttpResponse("New project creation done.")
 
+def delete_project(request, id):
+
+    from meta_actions import delete_project
+    delete_project(MetaProject.objects.get(id=id))
+
+    return projects(request)
+

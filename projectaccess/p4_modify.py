@@ -54,8 +54,8 @@ def update_p4_protect_for_users():
 def create_student_user_in_p4(p4, login, email, fullname):
 
         p4.create_user(login, email, fullname)
-        p4.add_user_to_group(login, 'Users')
-        p4.add_user_to_group(login, 'Students')
+        p4.add_user_to_group('Users', login)
+        p4.add_user_to_group('Students', login)
 
 def create_student_standard_files_in_p4(p4, user):
 
@@ -69,7 +69,8 @@ def create_student_standard_files_in_p4(p4, user):
                 file_without_local_prefix = file_with_local_prefix[len(local_prefix):]
                 local_file = local_prefix + file_without_local_prefix
                 depot_file = depot_prefix + file_without_local_prefix
-                p4.import_local_file(local_file, depot_file, 'Setting up user-area for %s' % user)
+                if not p4.file_exists(depot_file):
+                    p4.import_local_file(local_file, depot_file, 'Setting up user-area for %s' % user)
 
 def create_protect_lines_for_user_in_p4(p4, user):
 

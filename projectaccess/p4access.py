@@ -98,12 +98,21 @@ class P4Connection():
         logger.debug("Invoking P4 command: obliterate %s %s" % ("-y", file))
         logger.debug(self.p4.run_obliterate("-y", file))
 
+    def file_exists(self, file):
+        try:
+            logger.debug("Invoking P4 command: files %s %s %s %s" % ("-e", "-m", "1", file))
+            result = self.p4.run_files("-e", "-m", "1", file)
+            logger.debug(result)
+            return True
+        except:
+            return False
+
     def import_local_file(self, local_file, remote_path, reason):
         workspace_name = 'p4_import_local_file_workspace'
-        view = [(remote_path, '//%s/%s' % (workspace_name, local_file))]
+        view = [(str(remote_path), str('//%s/%s' % (workspace_name, local_file)))]
         self.create_workspace(workspace_name, os.getcwd(), view)
         try:
-            self.add(workspace_name, local_file)
+            self.add(workspace_name, str(local_file))
             self.submit(workspace_name, reason)
             self.delete_workspace(workspace_name)
         except:

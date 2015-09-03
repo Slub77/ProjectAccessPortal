@@ -12,7 +12,7 @@ def add_user_to_project(meta_project, meta_user):
     # Add user to MetaProject
 
     with P4Connection('localhost', '1666', 'kalms') as p4:
-        p4.add_user_to_group(meta_project.p4_group.name, meta_user.p4_user.user)
+        p4.add_user_to_group(meta_project.p4_group.name, str(meta_user.p4_user.user))
         meta_project.members.add(meta_user)
 
 def remove_user_from_project(meta_project, meta_user):

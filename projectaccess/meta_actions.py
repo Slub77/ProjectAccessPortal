@@ -1,5 +1,5 @@
 
-from p4access import P4Connection
+from P4Connection import P4Connection
 
 from models import P4Group, MetaProject
 

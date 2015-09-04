@@ -7,23 +7,21 @@
 
     {% for project in projects %}
 
-        <h1>Project: {{ project.block }} - {{ project.name }} <a href="{% url 'projectaccess:delete_project' project.id %}"/>Delete</a></h1>
+        <h1>Project: {{ project.name }} <a href="{% url 'projectaccess:delete_project' project.id %}"/>Delete</a></h1>
 
         <table class="table">
 
             <thead>
                 <tr>
-                    <td>Member's LDAP name</td>
-                    <td>Member's P4 user</td>
+                    <td>Members with access</td>
                 </tr>
             </thead>
 
             <tbody>
 
-                {% for user in project.members.all %}
+                {% for user_with_access in users_with_access.objects.all %}
                     <tr>
-                        <td> {% if user.ldap_user %} {{ user.ldap_user.dn }} {% endif %} <td>
-                        <td> {% if user.p4_user %} {{ user.p4_user.user }} {% endif %} <td>
+                        <td> {{ user_with_access.user.name }} <td>
                     </tr>
                 {% endfor %}
 

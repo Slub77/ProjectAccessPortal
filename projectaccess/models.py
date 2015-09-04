@@ -34,52 +34,31 @@ class LDAPUser(models.Model):
 	mail = models.CharField("E-Mail", max_length=1024)		# mail: rdaugherty@example.com
 
 
-# Example of a P4 user specification
+## Example of a P4 user specification
+##
+## User: rdaugherty
+##
+## Email: rdaugherty@example.com
+##
+## FullName: Robeert Daugherty
 #
-# User: rdaugherty
 #
-# Email: rdaugherty@example.com
-#
-# FullName: Robeert Daugherty
+#class P4User(models.Model):
+#	user = models.CharField("User", max_length=1024)			# example: rdaugherty
+#	email = models.CharField("E-Mail", max_length=1024)			# example: rdaugherty@example.com
+#	full_name = models.CharField("Full Name", max_length=1024)	# example: Robert Daugherty
 
 
-class P4User(models.Model):
-	user = models.CharField("User", max_length=1024)			# example: rdaugherty
-	email = models.CharField("E-Mail", max_length=1024)			# example: rdaugherty@example.com
-	full_name = models.CharField("Full Name", max_length=1024)	# example: Robert Daugherty
-
-
-class MetaUser(models.Model):
-	ldap_user = models.OneToOneField(LDAPUser, null=True)
-	p4_user = models.OneToOneField(P4User, null=True)
-
-	@staticmethod
-	def hash(ldap_user, p4_user):
-		if ldap_user:
-			ldap_user_dn = ldap_user.dn
-		else:
-			ldap_user_dn = "None"
-
-		if p4_user:
-			p4_user_user = p4_user.user
-		else:
-			p4_user_user = "None"
-
-		return "(%s, %s)" % (ldap_user_dn, p4_user_user)
-
-	def __str__(self):
-		return MetaUser.hash(self.ldap_user, self.p4_user)
-
-class P4Group(models.Model):
-	name = models.CharField("Group", max_length=1024)
-
-	member_users = models.ManyToManyField(P4User)
-	member_subgroups = models.ManyToManyField('P4Group')
-
-class MetaProject(models.Model):
-	p4_group = models.OneToOneField(P4Group, null=True)
-
-	block = models.CharField("Block", max_length=128)
+class PAUser(models.Model):
 	name = models.CharField("Name", max_length=1024)
 
-	members = models.ManyToManyField(MetaUser)
+class PAUserProjectAccess(models.Model):
+	user = models.ForeignKey(PAUser);
+	# TODO: add access mode (read/write or read-only)
+	
+class PAProject(models.Model):
+	name = models.CharField("Name", max_length=1024)
+	p4_path = models.CharField("P4Path", max_length=1024)
+	p4_access_group_name = models.CharField("P4AccessGroupName", max_length=1024)
+	users_with_access = models.ManyToManyField(PAUserProjectAccess)
+	# TODO: add support for giving groups access

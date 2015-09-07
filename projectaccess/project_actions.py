@@ -2,6 +2,34 @@
 from P4Connection import P4Connection
 from models import PAUser, PAProject, PAUserProjectAccess
 
+import logging
+logger = logging.getLogger(__name__)
+
+def construct_protection_line(p4_path, p4_access_group_name):
+    return 'write group %s * %s/...' % (p4_access_group_name, p4_path)
+
+def add_p4_protection_line(p4, p4_protection_line):
+
+    protections = p4.read_protect()
+
+    if p4_protection_line in protections:
+        logger.warning('Attempted to add P4 protection line "%s" which already existed in protect table; operation ignored', p4_protection_line)
+    else:
+        protections.append(str(p4_protection_line))
+
+    p4.write_protect(protections)
+
+def remove_p4_protection_line(p4, p4_protection_line):
+
+    protections = p4.read_protect()
+
+    try:
+        protections.remove(p4_protection_line)
+    except:
+        logger.warning('Attempted to remove P4 protection line "%s" which did not exist in protect table; operation ignored', p4_protection_line)
+
+    p4.write_protect(protections)
+
 def create_new_project(project_name):
 
     p4_path = '//Projects2/%s' % project_name
@@ -9,18 +37,17 @@ def create_new_project(project_name):
 
     project = PAProject.objects.create(name=project_name, p4_path=p4_path, p4_access_group_name=p4_access_group_name)
 
-#    with P4Connection('localhost', '1666', 'kalms') as p4:
-#
-#        # TODO: update protections in P4
-#        update_p4_protections()
+    with P4Connection('localhost', '1666', 'kalms') as p4:
+
+        add_p4_protection_line(p4, construct_protection_line(p4_path, p4_access_group_name))
 
     return project
 
 def delete_project(project):
 
-    project.delete()
-
     with P4Connection('localhost', '1666', 'kalms') as p4:
+
+        remove_p4_protection_line(p4, construct_protection_line(project.p4_path, project.p4_access_group_name))
 
         # Delete group in P4
         # TODO: perhaps check for group existence before deleting? That will allow for ignoring a narrower range of exceptions
@@ -29,8 +56,7 @@ def delete_project(project):
         except:
             pass
 
-#        # TODO: update protections in P4
-#        update_p4_protections()
+    project.delete()
 
     pass
 

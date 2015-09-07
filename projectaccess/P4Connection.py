@@ -5,6 +5,9 @@ from P4 import P4, P4Exception
 
 import unittest
 
+import logging
+logger = logging.getLogger(__name__)
+
 class P4Connection():
 
     def __init__(self, host, port, user):
@@ -14,21 +17,27 @@ class P4Connection():
         self.p4.user = user
 
     def __enter__(self):
-        self.p4.connect()
+        logger.debug("Connecting to P4")
+        logger.debug(self.p4.connect())
         return self
 
     def __exit__(self, type, value, traceback):
-        self.p4.disconnect()
+        logger.debug("Disconnecting from P4")
+        logger.debug(self.p4.disconnect())
 
     def connect(self):
-        self.p4.connect()
+        logger.debug("Connecting to P4")
+        logger.debug(self.p4.connect())
 
     def disconnect(self):
-        self.p4.disconnect()
+        logger.debug("Disconnecting from P4")
+        logger.debug(self.p4.disconnect())
 
 
     def get_users(self):
+        logger.debug("Invoking P4 command: users")
         users = self.p4.run("users")
+        logger.debug(users)
         return users
 
     def create_user(self, login, email, full_name):
@@ -37,10 +46,13 @@ class P4Connection():
             "Email: " + email + "\n\n" + \
             "FullName: " + full_name + "\n\n"
 
-        self.p4.run("user", "-i", "-f")
+        logger.debug("Invoking P4 command: user -i -f")
+        logger.debug("Extra input: %s" % self.p4.input)
+        logger.debug(self.p4.run("user", "-i", "-f"))
 
     def delete_user(self, login):
-        self.p4.run("user", "-d", "-f", login)
+        logger.debug("Invoking P4 command: %s %s %s %s" % ("user", "-d", "-f", login))
+        logger.debug(self.p4.run("user", "-d", "-f", login))
 
     def create_workspace(self, name, root, view):
         view_as_strings = ""
@@ -51,38 +63,56 @@ class P4Connection():
             'Client: ' + name + '\n\n' + \
             'Root: ' + root + '\n\n' + \
             'View: ' + view_as_strings + '\n\n'
-        self.p4.save_client(workspace)
+        logger.debug("Invoking P4 command: client -i")
+        logger.debug("Extra input: %s" % workspace)
+        logger.debug(self.p4.save_client(workspace))
 
     def delete_workspace(self, name):
-        self.p4.run_client("-d", "-f", name)
+        logger.debug("Invoking P4 command: client %s %s %s" % ("-d", "-f", name))
+        logger.debug(self.p4.run_client("-d", "-f", name))
 
     def add(self, workspace, local_file):
         with p4_workspace(self.p4, workspace) as workspace_obj:
-            self.p4.run_add(local_file)
+            logger.debug("Invoking P4 command: add %s" % local_file)
+            logger.debug(self.p4.run_add(local_file))
 
     def submit(self, workspace, reason):
         with p4_workspace(self.p4, workspace) as workspace_obj:
-            self.p4.run_submit("-d", reason)
+            logger.debug("Invoking P4 command: submit %s %s" % ("-d", reason))
+            logger.debug(self.p4.run_submit("-d", reason))
 
     def create_depot(self, name):
         depot = \
             'Depot: ' + name + '\n\n' + \
             'Type: local' + '\n\n' + \
             'Map: ' + name + '/...' + '\n\n'
-        self.p4.save_depot(depot)
+        logger.debug("Invoking P4 command: depot -i")
+        logger.debug("Extra input: %s" % depot)
+        logger.debug(self.p4.save_depot(depot))
 
     def delete_depot(self, name):
+        logger.debug("Invoking P4 command: depot %s %s %s" % ("-d", "-f", name))
         self.p4.run_depot("-d", "-f", name)
 
     def obliterate_file(self, file):
-        self.p4.run_obliterate("-y", file)
+        logger.debug("Invoking P4 command: obliterate %s %s" % ("-y", file))
+        logger.debug(self.p4.run_obliterate("-y", file))
+
+    def file_exists(self, file):
+        try:
+            logger.debug("Invoking P4 command: files %s %s %s %s" % ("-e", "-m", "1", file))
+            result = self.p4.run_files("-e", "-m", "1", file)
+            logger.debug(result)
+            return True
+        except:
+            return False
 
     def import_local_file(self, local_file, remote_path, reason):
         workspace_name = 'p4_import_local_file_workspace'
-        view = [(remote_path, '//%s/%s' % (workspace_name, local_file))]
+        view = [(str(remote_path), str('//%s/%s' % (workspace_name, local_file)))]
         self.create_workspace(workspace_name, os.getcwd(), view)
         try:
-            self.add(workspace_name, local_file)
+            self.add(workspace_name, str(local_file))
             self.submit(workspace_name, reason)
             self.delete_workspace(workspace_name)
         except:
@@ -90,17 +120,26 @@ class P4Connection():
             raise
 
     def read_protect(self):
+        logger.debug("Invoking P4 command: protect -o")
         protections = self.p4.run_protect('-o')
+        logger.debug(protections)
         return protections[0]['Protections']
 
     def write_protect(self, protections):
-        self.p4.save_protect([{'Protections': protections}])
+        logger.debug("Invoking P4 command: protect -i")
+        logger.debug("Extra input: %s" % [{'Protections': protections}])
+        logger.debug(self.p4.save_protect([{'Protections': protections}]))
 
     def get_groups(self):
-        return self.p4.run_groups()
+        logger.debug("Invoking P4 command: groups")
+        groups = self.p4.run_groups()
+        logger.debug(groups)
+        return groups
 
     def read_group_members(self, name):
+        logger.debug("Invoking P4 command: group %s %s" % ("-o", name))
         group = self.p4.run_group("-o", name)
+        logger.debug(group)
 
         if 'Users' in group[0]:
             users = group[0]['Users']
@@ -115,13 +154,18 @@ class P4Connection():
         return (users, subgroups)
 
     def write_group_members(self, name, users, subgroups):
+        logger.debug("Invoking P4 command: group %s %s" % ("-o", name))
         group = self.p4.run_group("-o", name)
+        logger.debug(group)
         group[0]['Users'] = users
         group[0]['Subgroups'] = subgroups
-        self.p4.save_group(group)
+        logger.debug("Invoking P4 command: group -i")
+        logger.debug("Extra input: %s" % group)
+        logger.debug(self.p4.save_group(group))
 
     def delete_group(self, name):
-        self.p4.run_group("-d", name)
+        logger.debug("Invoking P4 command: group %s %s" % ("-d", name))
+        logger.debug(self.p4.run_group("-d", name))
 
     def add_user_to_group(self, group, user):
         (users, subgroups) = self.read_group_members(group)
@@ -153,9 +197,11 @@ class p4_workspace():
 
     def __enter__(self):
         self.old_workspace = self.p4.client
+        logger.debug("Changing active P4 workspace to %s" % self.workspace)
         self.p4.client = self.workspace
 
     def __exit__(self, type, value, traceback):
+        logger.debug("Changing active P4 workspace to %s" % self.old_workspace)
         self.p4.client = self.old_workspace
 
 

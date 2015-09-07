@@ -1,12 +1,12 @@
 
-from p4access import P4Connection
+from P4Connection import P4Connection
 from models import PAUser
 
 import logging
 logger = logging.getLogger(__name__)
 
 def clear_django_users():
-    P4User.objects.all().delete()
+    PAUser.objects.all().delete()
 
 def update_django_users(new_p4_users):
 

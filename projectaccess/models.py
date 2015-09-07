@@ -28,10 +28,10 @@ from django.db import models
 # gidNumber: 1000
 
 class LDAPUser(models.Model):
-	dn = models.CharField("Distinguished Name", max_length=1024)	# dn: uid=rdaugherty,ou=People,dc=example,dc=com
-	uid = models.CharField("User ID", max_length=256)		# uid: rdaugherty
-	cn = models.CharField("Canonical Name", max_length=1024)	# cn: Robert Daugherty
-	mail = models.CharField("E-Mail", max_length=1024)		# mail: rdaugherty@example.com
+    dn = models.CharField("Distinguished Name", max_length=1024)	# dn: uid=rdaugherty,ou=People,dc=example,dc=com
+    uid = models.CharField("User ID", max_length=256)		# uid: rdaugherty
+    cn = models.CharField("Canonical Name", max_length=1024)	# cn: Robert Daugherty
+    mail = models.CharField("E-Mail", max_length=1024)		# mail: rdaugherty@example.com
 
 
 ## Example of a P4 user specification
@@ -50,16 +50,16 @@ class LDAPUser(models.Model):
 
 
 class PAUser(models.Model):
-	name = models.CharField("Name", max_length=1024)
+    name = models.CharField("Name", max_length=1024)
 
 class PAProject(models.Model):
-	name = models.CharField("Name", max_length=1024)
-	p4_path = models.CharField("P4Path", max_length=1024)
-	p4_access_group_name = models.CharField("P4AccessGroupName", max_length=1024)
-	# TODO: add support for giving groups access
+    name = models.CharField("Name", max_length=1024)
+    p4_path = models.CharField("P4Path", max_length=1024)
+    p4_access_group_name = models.CharField("P4AccessGroupName", max_length=1024)
+    # TODO: add support for giving groups access
 
 class PAUserProjectAccess(models.Model):
-	project = models.ForeignKey(PAProject)
-	user = models.ForeignKey(PAUser)
-	# TODO: add access mode (read/write or read-only)
+    project = models.ForeignKey(PAProject)
+    user = models.ForeignKey(PAUser)
+    # TODO: add access mode (read/write or read-only)
 

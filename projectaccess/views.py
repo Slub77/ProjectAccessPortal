@@ -47,6 +47,22 @@ def users(request):
     return HttpResponse(template.render(context))
 
 @login_required
+def my_projects(request):
+
+    template = loader.get_template('projects.html')
+
+    pa_user = PAUser.objects.get(name=request.user.username)
+
+    pa_user_project_accesses = PAUserProjectAccess.objects.filter(user=pa_user)
+    pa_projects = PAProject.objects.filter(pauserprojectaccess__in=pa_user_project_accesses)
+
+    context = RequestContext(request, {
+        'projects': pa_projects,
+    })
+
+    return HttpResponse(template.render(context))
+
+@login_required
 def projects(request):
 
     if request.method == 'POST':

@@ -103,6 +103,16 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
+# Authentication settings
+
+AUTHENTICATION_BACKENDS = [
+    'projectaccess.P4AuthBackend.P4AuthBackend'
+]
+
+LOGIN_URL = '/projectaccess/login/'
+LOGOUT_URL = '/projectaccess/logout/'
+
+
 # Logging configuration
 
 LOGGING = {

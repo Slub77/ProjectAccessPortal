@@ -1,12 +1,34 @@
 
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext, loader
+from django.shortcuts import render_to_response
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
 
 from models import PAUser, PAProject, PAUserProjectAccess
 
 import logging
 logger = logging.getLogger(__name__)
 
+def login_user(request):
+    logout(request)
+    username = password = ''
+    if request.POST:
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                return HttpResponseRedirect('/projectaccess/')
+    return render_to_response('login.html', context_instance=RequestContext(request))
+
+def logout_user(request):
+    logout(request)
+    return HttpResponseRedirect('/projectaccess/login')
+
+@login_required
 def index(request):
 
     template = loader.get_template('index.html')
@@ -14,6 +36,7 @@ def index(request):
 
     return HttpResponse(template.render(context))
 
+@login_required
 def users(request):
 
     template = loader.get_template('users.html')
@@ -23,6 +46,7 @@ def users(request):
 
     return HttpResponse(template.render(context))
 
+@login_required
 def projects(request):
 
     if request.method == 'POST':
@@ -49,6 +73,7 @@ def projects(request):
 
     return HttpResponse(template.render(context))
 
+@login_required
 def import_p4_users(request):
 
     from p4_import import import_p4_to_django
@@ -56,6 +81,7 @@ def import_p4_users(request):
 
     return users(request)
 
+@login_required
 def create_new_project(request):
 
     template = loader.get_template('create_new_project.html')
@@ -63,6 +89,7 @@ def create_new_project(request):
 
     return HttpResponse(template.render(context))
 
+@login_required
 def create_new_project_submit(request):
 
     name = request.POST['name']
@@ -72,6 +99,7 @@ def create_new_project_submit(request):
 
     return HttpResponse("New project creation done.")
 
+@login_required
 def delete_project(request, id):
 
     from project_actions import delete_project

@@ -42,6 +42,9 @@
             <li><a href="{% url 'projectaccess:projects' %}">Projects</a></li>
             <li><a href="{% url 'projectaccess:users' %}">Users</a></li>
           </ul>
+        <div class="navbar-brand">
+            <a href="{% url 'projectaccess:logout' %}">Current User: {{ user.username }}</a>
+        </div>
         </div><!--/.nav-collapse -->
       </div>
     </nav>

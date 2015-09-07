@@ -23,28 +23,27 @@
 
                 <tbody>
 
-                    {% for user_with_access in users_with_access.objects.all %}
+                    {% for user_with_access in project.pauserprojectaccess_set.all %}
 
                         <tr>
                             <td> {{ user_with_access.user.name }} </td>
-<!--
+
                             <td>
                                 <form action="{% url 'projectaccess:projects' %}" method="post">
                                     {% csrf_token %}
                                     <input type="hidden" name="action" value="remove" />
-                                    <input type="hidden" name="project_id" value="{{project.id}}">
-                                    <input type="hidden" name="user_id" value="{{user_with_access.id}}">
+                                    <input type="hidden" name="user_with_access_id" value="{{user_with_access.id}}">
                                     <button type="submit" name="submit" class="btn btn-default">Remove</button>
                                 </form>
                             </td>
--->
+
                         </tr>
 
                     {% endfor %}
 
                 </tbody>
             </table>
-<!--
+
             <form action="{% url 'projectaccess:projects' %}" method="post">
                 {% csrf_token %}
                 <div class="form-group">
@@ -55,7 +54,7 @@
                     <button type="submit" class="btn btn-default">Add</button>
                 </div>
             </form>
--->
+
         </div>
 
         <hr>

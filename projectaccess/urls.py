@@ -9,8 +9,12 @@ urlpatterns = [
     url(r'^users/$', views.users, name='users'),
     url(r'^my_projects/$', views.my_projects, name='my_projects'),
     url(r'^projects/$', views.projects, name='projects'),
+    url(r'^groups/$', views.groups, name='groups'),
     url(r'^import_p4_users/$', views.import_p4_users, name='import_p4_users'),
     url(r'^create_new_project/$', views.create_new_project, name='create_new_project'),
     url(r'^create_new_project_submit/$', views.create_new_project_submit, name='create_new_project_submit'),
     url(r'^(?P<id>[0-9]+)/delete_project/$', views.delete_project, name='delete_project'),
+    url(r'^create_new_group/$', views.create_new_group, name='create_new_group'),
+    url(r'^create_new_group_submit/$', views.create_new_group_submit, name='create_new_group_submit'),
+    url(r'^(?P<id>[0-9]+)/delete_group/$', views.delete_group, name='delete_group'),
 ]

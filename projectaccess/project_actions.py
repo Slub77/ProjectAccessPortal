@@ -1,6 +1,6 @@
 
 from P4Connection import P4Connection
-from models import PAUser, PAProject, PAUserProjectAccess
+from models import PAUser, PAProject, PAUserProjectAccess, PAGroupProjectAccess
 
 import logging
 logger = logging.getLogger(__name__)
@@ -74,4 +74,20 @@ def remove_user_from_project(project_access):
     with P4Connection('localhost', '1666', 'kalms') as p4:
 
         p4.remove_user_from_group(project_access.project.p4_access_group_name, project_access.user.name)
+        project_access.delete()
+
+def add_group_to_project(project, group):
+
+    with P4Connection('localhost', '1666', 'kalms') as p4:
+
+        project_access = PAGroupProjectAccess.objects.create(project=project, group=group)
+        project_access.save()
+        p4.add_subgroup_to_group(project.p4_access_group_name, str(group.name))
+        return project_access
+
+def remove_group_from_project(project_access):
+
+    with P4Connection('localhost', '1666', 'kalms') as p4:
+
+        p4.remove_subgroup_from_group(project_access.project.p4_access_group_name, project_access.group.name)
         project_access.delete()

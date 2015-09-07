@@ -1,0 +1,16 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+
+
+    <form action="{% url 'projectaccess:create_new_group_submit' %}" method="post">
+        {% csrf_token %}
+        Group name: <input type="text" name="name" />
+        <input type="submit" value="create" />
+    </form>
+
+</div>
+{% endblock %}

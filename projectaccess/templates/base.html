@@ -34,6 +34,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="#">ProjectAccessPortal</a>
         </div>
@@ -43,6 +44,7 @@
             <li><a href="{% url 'projectaccess:my_projects' %}">My Projects</a></li>
             <li><a href="{% url 'projectaccess:projects' %}">Projects</a></li>
             <li><a href="{% url 'projectaccess:users' %}">Users</a></li>
+            <li><a href="{% url 'projectaccess:groups' %}">Groups</a></li>
           </ul>
         <div class="navbar-brand">
             <a href="{% url 'projectaccess:logout' %}">Current User: {{ user.username }}</a>

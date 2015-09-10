@@ -13,6 +13,12 @@
                 <div class="col-md-4"><h1><a href="{% url 'projectaccess:delete_project' project.id %}"/>Delete</a></h1></div>
             </div>
 
+            <hr>
+            
+            Repository location: {{ project.p4_path }}
+
+            <hr>
+
             <table class="table">
 
                 <thead>

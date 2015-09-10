@@ -1,6 +1,8 @@
 
 import os
 
+from django.conf import settings
+
 from P4 import P4, P4Exception
 
 import unittest
@@ -8,7 +10,7 @@ import unittest
 import logging
 logger = logging.getLogger(__name__)
 
-class P4Connection():
+class P4Connection(object):
 
     def __init__(self, host, port, user):
         self.p4 = P4()
@@ -203,6 +205,12 @@ class p4_workspace():
     def __exit__(self, type, value, traceback):
         logger.debug("Changing active P4 workspace to %s" % self.old_workspace)
         self.p4.client = self.old_workspace
+
+
+class P4ConnectionAsServiceUser(P4Connection):
+
+    def __init__(self):
+        super(P4ConnectionAsServiceUser, self).__init__(settings.PERFORCE['HOST'], settings.PERFORCE['PORT'], settings.PERFORCE['SERVICE_USER'])
 
 
 class TestP4Methods(unittest.TestCase):

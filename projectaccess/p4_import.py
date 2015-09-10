@@ -1,5 +1,5 @@
 
-from P4Connection import P4Connection
+from P4Connection import P4ConnectionAsServiceUser
 from models import PAUser
 
 import logging
@@ -55,7 +55,7 @@ def update_django_users(new_p4_users):
 def import_p4_to_django():
 #    clear_django_users()
 
-    with P4Connection('localhost', '1666', 'kalms') as p4:
+    with P4ConnectionAsServiceUser() as p4:
         current_p4_users = p4.get_users()
 
     update_django_users(current_p4_users)

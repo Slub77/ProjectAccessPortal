@@ -112,6 +112,12 @@ AUTHENTICATION_BACKENDS = [
 LOGIN_URL = '/projectaccess/login/'
 LOGOUT_URL = '/projectaccess/logout/'
 
+PERFORCE = {
+    'HOST' : 'localhost',
+    'PORT' : '1666',
+    'SERVICE_USER' : 'kalms'
+}
+
 
 # Logging configuration
 

@@ -1,5 +1,5 @@
 
-from P4Connection import P4Connection
+from P4Connection import P4ConnectionAsServiceUser
 from models import PAUser, PAProject, PAUserProjectAccess, PAGroupProjectAccess
 
 import logging
@@ -37,7 +37,7 @@ def create_new_project(project_name):
 
     project = PAProject.objects.create(name=project_name, p4_path=p4_path, p4_access_group_name=p4_access_group_name)
 
-    with P4Connection('localhost', '1666', 'kalms') as p4:
+    with P4ConnectionAsServiceUser() as p4:
 
         add_p4_protection_line(p4, construct_protection_line(p4_path, p4_access_group_name))
 
@@ -45,7 +45,7 @@ def create_new_project(project_name):
 
 def delete_project(project):
 
-    with P4Connection('localhost', '1666', 'kalms') as p4:
+    with P4ConnectionAsServiceUser() as p4:
 
         remove_p4_protection_line(p4, construct_protection_line(project.p4_path, project.p4_access_group_name))
 
@@ -62,7 +62,7 @@ def delete_project(project):
 
 def add_user_to_project(project, user):
 
-    with P4Connection('localhost', '1666', 'kalms') as p4:
+    with P4ConnectionAsServiceUser() as p4:
 
         project_access = PAUserProjectAccess.objects.create(project=project, user=user)
         project_access.save()
@@ -71,14 +71,14 @@ def add_user_to_project(project, user):
 
 def remove_user_from_project(project_access):
 
-    with P4Connection('localhost', '1666', 'kalms') as p4:
+    with P4ConnectionAsServiceUser() as p4:
 
         p4.remove_user_from_group(project_access.project.p4_access_group_name, project_access.user.name)
         project_access.delete()
 
 def add_group_to_project(project, group):
 
-    with P4Connection('localhost', '1666', 'kalms') as p4:
+    with P4ConnectionAsServiceUser() as p4:
 
         project_access = PAGroupProjectAccess.objects.create(project=project, group=group)
         project_access.save()
@@ -87,7 +87,7 @@ def add_group_to_project(project, group):
 
 def remove_group_from_project(project_access):
 
-    with P4Connection('localhost', '1666', 'kalms') as p4:
+    with P4ConnectionAsServiceUser() as p4:
 
         p4.remove_subgroup_from_group(project_access.project.p4_access_group_name, project_access.group.name)
         project_access.delete()

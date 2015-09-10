@@ -1,5 +1,5 @@
 
-from P4Connection import P4Connection
+from P4Connection import P4ConnectionAsServiceUser
 from models import PAUser, PAGroup
 
 import logging
@@ -14,7 +14,7 @@ def create_new_group(group_name):
 
 def delete_group(group):
 
-    with P4Connection('localhost', '1666', 'kalms') as p4:
+    with P4ConnectionAsServiceUser() as p4:
 
         # Delete group in P4
         # TODO: perhaps check for group existence before deleting? That will allow for ignoring a narrower range of exceptions
@@ -29,7 +29,7 @@ def delete_group(group):
 
 def add_user_to_group(group, user):
 
-    with P4Connection('localhost', '1666', 'kalms') as p4:
+    with P4ConnectionAsServiceUser() as p4:
 
         group.members.add(user)
         group.save()
@@ -37,7 +37,7 @@ def add_user_to_group(group, user):
 
 def remove_user_from_group(group, user):
 
-    with P4Connection('localhost', '1666', 'kalms') as p4:
+    with P4ConnectionAsServiceUser() as p4:
 
         group.members.remove(user)
         group.save()

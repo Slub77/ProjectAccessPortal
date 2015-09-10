@@ -1,3 +1,6 @@
+
+from django.conf import settings
+
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.models import User
 
@@ -12,7 +15,7 @@ class P4AuthBackend(ModelBackend):
     """
     def authenticate(self, username=None, password=None):
         try:
-            with P4Connection('localhost', '1666', str(username)) as p4:
+            with P4Connection(settings.PERFORCE['HOST'], settings.PERFORCE['USER'], str(username)) as p4:
                 pass
 
         except Exception, e:

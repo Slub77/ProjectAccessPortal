@@ -1,5 +1,5 @@
 
-from P4Connection import P4Connection
+from P4Connection import P4ConnectionAsServiceUser
 
 import os
 
@@ -8,12 +8,12 @@ logger = logging.getLogger(__name__)
 
 def create_default_project_user():
 
-    with P4Connection('localhost', '1666', 'kalms') as p4:
+    with P4ConnectionAsServiceUser() as p4:
             p4.create_user('default_project_user', 'no_email', 'default project user')
 
 def create_missing_p4_users():
 
-    with P4Connection('localhost', '1666', 'kalms') as p4:
+    with P4ConnectionAsServiceUser() as p4:
 
         from models import MetaUser
         for meta_user in MetaUser.objects.all():
@@ -34,7 +34,7 @@ def generate_protect_lines_for_user(name):
 
 def update_p4_protect_for_users():
 
-    with P4Connection('localhost', '1666', 'kalms') as p4:
+    with P4ConnectionAsServiceUser() as p4:
 
         protections = p4.read_protect()
         from models import MetaUser
@@ -59,7 +59,7 @@ def generate_protect_lines_for_project(project_block, project_name, p4_group_nam
 
 def update_p4_protect_for_projects():
 
-    with P4Connection('localhost', '1666', 'kalms') as p4:
+    with P4ConnectionAsServiceUser() as p4:
 
         protections = p4.read_protect()
         from models import MetaProject

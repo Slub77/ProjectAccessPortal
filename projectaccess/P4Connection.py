@@ -42,6 +42,12 @@ class P4Connection(object):
         logger.debug(users)
         return users
 
+    def get_user(self, name):
+        logger.debug("Invoking P4 command: users %s" % name)
+        users = self.p4.run("users", name)
+        logger.debug(users)
+        return users
+
     def create_user(self, login, email, full_name):
         self.p4.input = \
             "User: " + login + "\n\n" + \

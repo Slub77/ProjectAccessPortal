@@ -1,5 +1,7 @@
 from django.db import models
 
+from django.contrib.auth.models import User
+
 # Create your models here.
 
 # Example of an LDAP user entry (this has been extracted from an example .ldif file)
@@ -48,6 +50,9 @@ class LDAPUser(models.Model):
 #	email = models.CharField("E-Mail", max_length=1024)			# example: rdaugherty@example.com
 #	full_name = models.CharField("Full Name", max_length=1024)	# example: Robert Daugherty
 
+class UserProfile(models.Model):
+    user = models.OneToOneField(User)
+    p4_user_name = models.CharField("Name", max_length=1024)
 
 class PAUser(models.Model):
     name = models.CharField("Name", max_length=1024)

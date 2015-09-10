@@ -5,12 +5,40 @@ from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 
-from models import PAUser, PAProject, PAUserProjectAccess, PAGroup, PAGroupProjectAccess
+from models import PAUser, PAProject, PAUserProjectAccess, PAGroup, PAGroupProjectAccess, UserProfile
+
+from P4Connection import P4ConnectionAsServiceUser
 
 import logging
 logger = logging.getLogger(__name__)
 
 def login_user(request):
+
+    def create_user_profile(user):
+        print str(user.ldap_user.attrs)
+
+        try:
+            user_profile = UserProfile.objects.get(user=user)
+        except:
+            user_profile = UserProfile.objects.create(user=user)
+            user_profile.save()
+        return user_profile
+
+    def initialize_user_p4_name(user_profile, ldap_attrs, ldap_attr_name):
+#            if not user_profile.p4_name:
+                if ldap_attr_name in ldap_attrs:
+                    user_profile.p4_username = ldap_attrs[ldap_attr_name][0]
+                    user_profile.save()
+
+    def p4_user_exists(user):
+        with P4ConnectionAsServiceUser() as p4:
+            try:
+                print user
+                p4.get_user(user.name)
+                return True
+            except:
+                return False
+
     logout(request)
     username = password = ''
     if request.POST:
@@ -19,9 +47,15 @@ def login_user(request):
 
         user = authenticate(username=username, password=password)
         if user is not None:
+            logger.info("user is not None")
             if user.is_active:
                 login(request, user)
-                return HttpResponseRedirect('/projectaccess/')
+                user_profile = create_user_profile(user)
+                initialize_user_p4_name(user_profile, user.ldap_user.attrs, 'homeDirectory')
+                if not p4_user_exists(user):
+                    return HttpResponseRedirect('/projectaccess/user/')
+                else:
+                    return HttpResponseRedirect('/projectaccess/')
     return render_to_response('login.html', context_instance=RequestContext(request))
 
 def logout_user(request):
@@ -43,6 +77,14 @@ def users(request):
     context = RequestContext(request, {
         'users': PAUser.objects.all(),
     })
+
+    return HttpResponse(template.render(context))
+
+@login_required
+def user(request):
+
+    template = loader.get_template('user.html')
+    context = RequestContext(request)
 
     return HttpResponse(template.render(context))
 
@@ -79,12 +121,12 @@ def projects(request):
             project_id = request.POST['project_id']
             name = request.POST['name']
             pa_project = PAProject.objects.get(id=project_id)
-            try:
-                pa_user = PAUser.objects.get(name=name)
-                add_user_to_project(pa_project, pa_user)
-            except:
-                pa_group = PAGroup.objects.get(name=name)
-                add_group_to_project(pa_project, pa_group)
+#            try:
+            pa_user = PAUser.objects.get(name=name)
+            add_user_to_project(pa_project, pa_user)
+#            except:
+#                pa_group = PAGroup.objects.get(name=name)
+#                add_group_to_project(pa_project, pa_group)
 
         elif request.POST['action'] == 'remove_user':
             project_access_id = request.POST['user_with_access_id']

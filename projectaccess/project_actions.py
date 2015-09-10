@@ -66,14 +66,14 @@ def add_user_to_project(project, user):
 
         project_access = PAUserProjectAccess.objects.create(project=project, user=user)
         project_access.save()
-        p4.add_user_to_group(project.p4_access_group_name, str(user.name))
+        p4.add_user_to_group(project.p4_access_group_name, str(user.userprofile.p4_user_name))
         return project_access
 
 def remove_user_from_project(project_access):
 
     with P4ConnectionAsServiceUser() as p4:
 
-        p4.remove_user_from_group(project_access.project.p4_access_group_name, project_access.user.name)
+        p4.remove_user_from_group(project_access.project.p4_access_group_name, project_access.user.userprofile.p4_user_name)
         project_access.delete()
 
 def add_group_to_project(project, group):

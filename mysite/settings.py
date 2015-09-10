@@ -106,11 +106,39 @@ STATIC_URL = '/static/'
 # Authentication settings
 
 AUTHENTICATION_BACKENDS = [
-    'projectaccess.P4AuthBackend.P4AuthBackend'
+    'django_auth_ldap.backend.LDAPBackend'
 ]
+
+AUTH_LDAP_SERVER_URI = 'ldap://localhost'
+
+import ldap
+from django_auth_ldap.config import LDAPSearch, LDAPSearchUnion, GroupOfUniqueNamesType
+
+# Look for LDAP users in these subtrees when performing authentication
+
+AUTH_LDAP_USER_SEARCH = LDAPSearchUnion(
+    LDAPSearch("ou=People,dc=example,dc=com", ldap.SCOPE_SUBTREE, "(uid=%(user)s)")
+#    LDAPSearch("ou=otherusers,dc=example,dc=com", ldap.SCOPE_SUBTREE, "(uid=%(user)s)"),
+)
+
+# Any LDAP group requests must be within this scope
+AUTH_LDAP_GROUP_SEARCH = LDAPSearch("ou=groups,dc=example,dc=com",
+    ldap.SCOPE_SUBTREE, "(objectClass=groupOfUniqueNames)"
+)
+AUTH_LDAP_GROUP_TYPE = GroupOfUniqueNamesType()
+
+# Only users which are members of this group are allowed to log in
+AUTH_LDAP_REQUIRE_GROUP = 'cn=Accounting Managers,ou=groups,dc=example,dc=com'
+
+
+# Talk with LDAP over SSL if possible
+#AUTH_LDAP_START_TLS = True
 
 LOGIN_URL = '/projectaccess/login/'
 LOGOUT_URL = '/projectaccess/logout/'
+
+
+# Perforce server configuration
 
 PERFORCE = {
     'HOST' : 'localhost',
@@ -141,7 +169,7 @@ LOGGING = {
         'projectaccess': {
             'handlers':['console'],
             'propagate': True,
-            'level':'INFO',
+            'level':'DEBUG',
         }
     }
 }

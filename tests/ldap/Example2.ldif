@@ -56,12 +56,6 @@ dn: dc=example,dc=com
 objectClass: domain
 objectClass: top
 dc: example
-#aci: (target ="ldap:///dc=example,dc=com")(targetattr !=
-# "userPassword")(version 3.0;acl "Anonymous read-search access";
-# allow (read, search, compare)(userdn = "ldap:///anyone");)
-#aci: (target="ldap:///dc=example,dc=com") (targetattr =
-# "*")(version 3.0; acl "allow all Admin group"; allow(all) groupdn =
-# "ldap:///cn=Directory Administrators,ou=Groups,dc=example,dc=com";)
 
 dn: ou=Company Servers,dc=example,dc=com
 objectClass: organizationalUnit
@@ -123,26 +117,6 @@ dn: ou=People,dc=example,dc=com
 objectClass: organizationalunit
 objectClass: top
 ou: People
-#aci: (target ="ldap:///ou=People,dc=example,dc=com")(targetattr =
-# "userpassword || telephonenumber || facsimiletelephonenumber")(version 3.0;
-# acl "Allow self entry modification";allow (write)(userdn = "ldap:///self");)
-#aci: (target ="ldap:///ou=People,dc=example,dc=com")(targetattr !=
-# "cn || sn || uid")(targetfilter ="(ou=Accounting)")(version 3.0;
-# acl "Accounting Managers Group Permissions";allow (write) (groupdn =
-#  "ldap:///cn=Accounting Managers,ou=groups,dc=example,dc=com");)
-#aci: (target ="ldap:///ou=People,dc=example,dc=com")(targetattr !=
-# "cn || sn || uid")(targetfilter ="(ou=Human Resources)")(version 3.0;
-# acl "HR Group Permissions";allow (write)(groupdn = "ldap:///cn=HR Managers,
-# ou=groups,dc=example,dc=com
-# ");)
-#aci: (target ="ldap:///ou=People,dc=example,dc=com")(targetattr !=
-# "cn ||sn || uid")(targetfilter ="(ou=Product Testing)")(version 3.0;
-# acl "QA Group Permissions";allow (write)(groupdn = "ldap:///cn=QA Managers,
-# ou=groups,dc=example,dc=com");)
-#aci: (target ="ldap:///ou=People,dc=example,dc=com")(targetattr !=
-# "cn || sn || uid")(targetfilter ="(ou=Product Development)")(version 3.0;
-# acl "Engineering Group Permissions";allow (write)(groupdn = "ldap:///
-# cn=PD Managers,ou=groups,dc=example,dc=com");)
 
 dn: uid=abarnes,ou=People,dc=example,dc=com
 objectClass: person
@@ -167,7 +141,6 @@ ou: Payroll
 ou: People
 uidNumber: 1119
 gidNumber: 1000
-extraAttribute1: Anne-LouiseBarnes
 
 dn: uid=abergin,ou=People,dc=example,dc=com
 objectClass: person
@@ -192,7 +165,6 @@ ou: Product Testing
 ou: People
 uidNumber: 1005
 gidNumber: 1000
-extraAttribute1: AndyBergin
 
 dn: uid=achassin,ou=People,dc=example,dc=com
 objectClass: person
@@ -217,7 +189,6 @@ ou: Payroll
 ou: People
 uidNumber: 1027
 gidNumber: 1000
-extraAttribute1: AshleyChassin
 
 dn: uid=ahall,ou=People,dc=example,dc=com
 objectClass: person
@@ -242,7 +213,6 @@ ou: Accounting
 ou: People
 uidNumber: 1103
 gidNumber: 1000
-extraAttribute1: AndyHall
 
 dn: uid=ahel,ou=People,dc=example,dc=com
 objectClass: person
@@ -267,7 +237,6 @@ ou: Accounting
 ou: People
 uidNumber: 1066
 gidNumber: 1000
-extraAttribute1: AndrewHel
 
 dn: uid=ahunter,ou=People,dc=example,dc=com
 objectClass: person
@@ -292,7 +261,6 @@ ou: Payroll
 ou: People
 uidNumber: 1106
 gidNumber: 1000
-extraAttribute1: AllisonHunter
 
 dn: uid=ajensen,ou=People,dc=example,dc=com
 objectClass: person
@@ -317,7 +285,6 @@ ou: Product Development
 ou: People
 uidNumber: 1095
 gidNumber: 1000
-extraAttribute1: AllisonJensen
 
 dn: uid=aknutson,ou=People,dc=example,dc=com
 objectClass: person
@@ -342,7 +309,6 @@ ou: Product Development
 ou: People
 uidNumber: 1112
 gidNumber: 1000
-extraAttribute1: AshleyKnutson
 
 dn: uid=alangdon,ou=People,dc=example,dc=com
 objectClass: person
@@ -367,7 +333,6 @@ ou: Product Development
 ou: People
 uidNumber: 1133
 gidNumber: 1000
-extraAttribute1: AndrewLangdon
 
 dn: uid=alutz,ou=People,dc=example,dc=com
 objectClass: person
@@ -392,7 +357,6 @@ ou: Product Development
 ou: People
 uidNumber: 1025
 gidNumber: 1000
-extraAttribute1: AlexanderLutz
 
 dn: uid=ashelton,ou=People,dc=example,dc=com
 objectClass: person
@@ -417,7 +381,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1060
 gidNumber: 1000
-extraAttribute1: AlexanderShelton
 
 dn: uid=awalker,ou=People,dc=example,dc=com
 objectClass: person
@@ -442,7 +405,6 @@ ou: Accounting
 ou: People
 uidNumber: 1136
 gidNumber: 1000
-extraAttribute1: AndyWalker
 
 dn: uid=awhite,ou=People,dc=example,dc=com
 objectClass: person
@@ -467,7 +429,6 @@ ou: Product Testing
 ou: People
 uidNumber: 1082
 gidNumber: 1000
-extraAttribute1: AlanWhite
 
 dn: uid=aworrell,ou=People,dc=example,dc=com
 objectClass: person
@@ -492,7 +453,6 @@ ou: Product Development
 ou: People
 uidNumber: 1108
 gidNumber: 1000
-extraAttribute1: AlanWorrell
 
 dn: uid=bfrancis,ou=People,dc=example,dc=com
 objectClass: person
@@ -517,7 +477,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1139
 gidNumber: 1000
-extraAttribute1: BarbaraFrancis
 
 dn: uid=bfree,ou=People,dc=example,dc=com
 objectClass: person
@@ -542,7 +501,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1056
 gidNumber: 1000
-extraAttribute1: BjornFree
 
 dn: uid=bhal2,ou=People,dc=example,dc=com
 objectClass: person
@@ -567,7 +525,6 @@ ou: Accounting
 ou: People
 uidNumber: 1024
 gidNumber: 1000
-extraAttribute1: BarbaraHall
 
 dn: uid=bhall,ou=People,dc=example,dc=com
 objectClass: person
@@ -592,7 +549,6 @@ ou: Product Development
 ou: People
 uidNumber: 1017
 gidNumber: 1000
-extraAttribute1: BenjaminHall
 
 dn: uid=bjablons,ou=People,dc=example,dc=com
 objectClass: person
@@ -617,7 +573,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1020
 gidNumber: 1000
-extraAttribute1: BarbaraJablonski
 
 dn: uid=bjense2,ou=People,dc=example,dc=com
 objectClass: person
@@ -642,7 +597,6 @@ ou: Accounting
 ou: People
 uidNumber: 1101
 gidNumber: 1000
-extraAttribute1: BjornJensen
 
 dn: uid=bjensen,ou=People,dc=example,dc=com
 objectClass: person
@@ -668,7 +622,6 @@ ou: Product Development
 ou: People
 uidNumber: 1076
 gidNumber: 1000
-extraAttribute1: BarbaraJensen2
 
 dn: uid=bmaddox,ou=People,dc=example,dc=com
 objectClass: person
@@ -693,7 +646,6 @@ ou: Accounting
 ou: People
 uidNumber: 1083
 gidNumber: 1000
-extraAttribute1: BarbaraMaddox
 
 dn: uid=bparker,ou=People,dc=example,dc=com
 objectClass: person
@@ -718,7 +670,6 @@ ou: Product Development
 ou: People
 uidNumber: 1146
 gidNumber: 1000
-extraAttribute1: BarryParker
 
 dn: uid=bplante,ou=People,dc=example,dc=com
 objectClass: person
@@ -743,7 +694,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1044
 gidNumber: 1000
-extraAttribute1: BrianPlante
 
 dn: uid=brentz,ou=People,dc=example,dc=com
 objectClass: person
@@ -768,7 +718,6 @@ ou: Product Testing
 ou: People
 uidNumber: 1048
 gidNumber: 1000
-extraAttribute1: BertramRentz
 
 dn: uid=brigden,ou=People,dc=example,dc=com
 objectClass: person
@@ -793,7 +742,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1142
 gidNumber: 1000
-extraAttribute1: BjornRigden
 
 dn: uid=bschneid,ou=People,dc=example,dc=com
 objectClass: person
@@ -818,7 +766,6 @@ ou: Product Testing
 ou: People
 uidNumber: 1046
 gidNumber: 1000
-extraAttribute1: BenjaminSchneider
 
 dn: uid=btalbo2,ou=People,dc=example,dc=com
 objectClass: person
@@ -843,7 +790,6 @@ ou: Product Development
 ou: People
 uidNumber: 1026
 gidNumber: 1000
-extraAttribute1: BjornTalbot
 
 dn: uid=btalbot,ou=People,dc=example,dc=com
 objectClass: person
@@ -868,7 +814,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1018
 gidNumber: 1000
-extraAttribute1: BradTalbot
 
 dn: uid=bwalker,ou=People,dc=example,dc=com
 objectClass: person
@@ -893,7 +838,6 @@ ou: Accounting
 ou: People
 uidNumber: 1038
 gidNumber: 1000
-extraAttribute1: BradWalker
 
 dn: uid=calexand,ou=People,dc=example,dc=com
 objectClass: person
@@ -918,7 +862,6 @@ ou: Product Development
 ou: People
 uidNumber: 1070
 gidNumber: 1000
-extraAttribute1: ChrisAlexander
 
 dn: uid=charvey,ou=People,dc=example,dc=com
 objectClass: person
@@ -943,7 +886,6 @@ ou: Product Development
 ou: People
 uidNumber: 1131
 gidNumber: 1000
-extraAttribute1: CecilHarvey
 
 dn: uid=cnewport,ou=People,dc=example,dc=com
 objectClass: person
@@ -968,7 +910,6 @@ ou: Product Development
 ou: People
 uidNumber: 1150
 gidNumber: 1000
-extraAttribute1: ChristophNewport
 
 dn: uid=cschmith,ou=People,dc=example,dc=com
 objectClass: person
@@ -993,7 +934,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1010
 gidNumber: 1000
-extraAttribute1: ChrisSchmith
 
 dn: uid=cwallace,ou=People,dc=example,dc=com
 objectClass: person
@@ -1018,7 +958,6 @@ ou: Product Development
 ou: People
 uidNumber: 1041
 gidNumber: 1000
-extraAttribute1: CecilWallace
 
 dn: uid=dakers,ou=People,dc=example,dc=com
 objectClass: person
@@ -1043,7 +982,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1088
 gidNumber: 1000
-extraAttribute1: DavidAkers
 
 dn: uid=dcope,ou=People,dc=example,dc=com
 objectClass: person
@@ -1068,7 +1006,6 @@ ou: Product Development
 ou: People
 uidNumber: 1126
 gidNumber: 1000
-extraAttribute1: DanCope
 
 dn: uid=dlangdon,ou=People,dc=example,dc=com
 objectClass: person
@@ -1093,7 +1030,6 @@ ou: Product Development
 ou: People
 uidNumber: 1111
 gidNumber: 1000
-extraAttribute1: DanLangdon
 
 dn: uid=dlanoway,ou=People,dc=example,dc=com
 objectClass: person
@@ -1118,7 +1054,6 @@ ou: Accounting
 ou: People
 uidNumber: 1117
 gidNumber: 1000
-extraAttribute1: DanLanoway
 
 dn: uid=dmiller,ou=People,dc=example,dc=com
 objectClass: person
@@ -1143,7 +1078,6 @@ ou: Accounting
 ou: People
 uidNumber: 1006
 gidNumber: 1000
-extraAttribute1: DavidMiller
 
 dn: uid=drose,ou=People,dc=example,dc=com
 objectClass: person
@@ -1168,7 +1102,6 @@ ou: Product Testing
 ou: People
 uidNumber: 1134
 gidNumber: 1000
-extraAttribute1: DavidRose
 
 dn: uid=dsmith,ou=People,dc=example,dc=com
 objectClass: person
@@ -1193,7 +1126,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1049
 gidNumber: 1000
-extraAttribute1: DanielSmith
 
 dn: uid=dswain,ou=People,dc=example,dc=com
 objectClass: person
@@ -1218,7 +1150,6 @@ ou: Payroll
 ou: People
 uidNumber: 1102
 gidNumber: 1000
-extraAttribute1: DietrichSwain
 
 dn: uid=dthorud,ou=People,dc=example,dc=com
 objectClass: person
@@ -1243,7 +1174,6 @@ ou: Accounting
 ou: People
 uidNumber: 1051
 gidNumber: 1000
-extraAttribute1: DavidThorud
 
 dn: uid=dward,ou=People,dc=example,dc=com
 objectClass: person
@@ -1268,7 +1198,6 @@ ou: Product Testing
 ou: People
 uidNumber: 1090
 gidNumber: 1000
-extraAttribute1: DanielWard
 
 dn: uid=ealexand,ou=People,dc=example,dc=com
 objectClass: person
@@ -1293,7 +1222,6 @@ ou: Product Testing
 ou: People
 uidNumber: 1147
 gidNumber: 1000
-extraAttribute1: ErinAlexander
 
 dn: uid=ecruse,ou=People,dc=example,dc=com
 objectClass: person
@@ -1318,7 +1246,6 @@ ou: Product Testing
 ou: People
 uidNumber: 1143
 gidNumber: 1000
-extraAttribute1: EricCruse
 
 dn: uid=ejohnson,ou=People,dc=example,dc=com
 objectClass: person
@@ -1343,7 +1270,6 @@ ou: Accounting
 ou: People
 uidNumber: 1036
 gidNumber: 1000
-extraAttribute1: EmanuelJohnson
 
 dn: uid=ekohler,ou=People,dc=example,dc=com
 objectClass: person
@@ -1368,7 +1294,6 @@ ou: Accounting
 ou: People
 uidNumber: 1052
 gidNumber: 1000
-extraAttribute1: ElbaKohler
 
 dn: uid=elott,ou=People,dc=example,dc=com
 objectClass: person
@@ -1393,7 +1318,6 @@ ou: Product Testing
 ou: People
 uidNumber: 1149
 gidNumber: 1000
-extraAttribute1: EmanuelLott
 
 dn: uid=ewalker,ou=People,dc=example,dc=com
 objectClass: person
@@ -1418,7 +1342,6 @@ ou: Payroll
 ou: People
 uidNumber: 1140
 gidNumber: 1000
-extraAttribute1: EricWalker
 
 dn: uid=eward,ou=People,dc=example,dc=com
 objectClass: person
@@ -1443,7 +1366,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1129
 gidNumber: 1000
-extraAttribute1: EricWard
 
 dn: uid=falbers,ou=People,dc=example,dc=com
 objectClass: person
@@ -1468,7 +1390,6 @@ ou: Accounting
 ou: People
 uidNumber: 1062
 gidNumber: 1000
-extraAttribute1: FrankAlbers
 
 dn: uid=gfarmer,ou=People,dc=example,dc=com
 objectClass: person
@@ -1493,7 +1414,6 @@ ou: Accounting
 ou: People
 uidNumber: 1007
 gidNumber: 1000
-extraAttribute1: GernFarmer
 
 dn: uid=gjensen,ou=People,dc=example,dc=com
 objectClass: person
@@ -1518,7 +1438,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1081
 gidNumber: 1000
-extraAttribute1: GernJensen
 
 dn: uid=gtriplet,ou=People,dc=example,dc=com
 objectClass: person
@@ -1543,7 +1462,6 @@ ou: Accounting
 ou: People
 uidNumber: 1033
 gidNumber: 1000
-extraAttribute1: GernTriplett
 
 dn: uid=gtyler,ou=People,dc=example,dc=com
 objectClass: person
@@ -1568,7 +1486,6 @@ ou: Accounting
 ou: People
 uidNumber: 1099
 gidNumber: 1000
-extraAttribute1: GernTyler
 
 dn: uid=hmiller,ou=People,dc=example,dc=com
 objectClass: person
@@ -1593,7 +1510,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1028
 gidNumber: 1000
-extraAttribute1: HarryMiller
 
 dn: uid=jbourke,ou=People,dc=example,dc=com
 objectClass: person
@@ -1618,7 +1534,6 @@ ou: Product Development
 ou: People
 uidNumber: 1116
 gidNumber: 1000
-extraAttribute1: JonBourke
 
 dn: uid=jbrown,ou=People,dc=example,dc=com
 objectClass: person
@@ -1643,7 +1558,6 @@ ou: Payroll
 ou: People
 uidNumber: 1085
 gidNumber: 1000
-extraAttribute1: JudyBrown
 
 dn: uid=jburrell,ou=People,dc=example,dc=com
 objectClass: person
@@ -1668,7 +1582,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1067
 gidNumber: 1000
-extraAttribute1: JamesBurrell
 
 dn: uid=jcampai2,ou=People,dc=example,dc=com
 objectClass: person
@@ -1693,7 +1606,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1029
 gidNumber: 1000
-extraAttribute1: JeffreyCampaigne
 
 dn: uid=jcampaig,ou=People,dc=example,dc=com
 objectClass: person
@@ -1718,7 +1630,6 @@ ou: Product Development
 ou: People
 uidNumber: 1023
 gidNumber: 1000
-extraAttribute1: JodyCampaigne
 
 dn: uid=jcruse,ou=People,dc=example,dc=com
 objectClass: person
@@ -1743,7 +1654,6 @@ ou: Payroll
 ou: People
 uidNumber: 1071
 gidNumber: 1000
-extraAttribute1: JimCruse
 
 dn: uid=jfalena,ou=People,dc=example,dc=com
 objectClass: person
@@ -1768,7 +1678,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1034
 gidNumber: 1000
-extraAttribute1: JohnFalena
 
 dn: uid=jgoldste,ou=People,dc=example,dc=com
 objectClass: person
@@ -1793,7 +1702,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1107
 gidNumber: 1000
-extraAttribute1: JonGoldstein
 
 dn: uid=jhunter,ou=People,dc=example,dc=com
 objectClass: person
@@ -1818,7 +1726,6 @@ ou: Product Development
 ou: People
 uidNumber: 1059
 gidNumber: 1000
-extraAttribute1: JanetHunter
 
 dn: uid=jjensen,ou=People,dc=example,dc=com
 objectClass: person
@@ -1843,7 +1750,6 @@ ou: Accounting
 ou: People
 uidNumber: 1086
 gidNumber: 1000
-extraAttribute1: JodyJensen
 
 dn: uid=jlange,ou=People,dc=example,dc=com
 objectClass: person
@@ -1868,7 +1774,6 @@ ou: Product Testing
 ou: People
 uidNumber: 1077
 gidNumber: 1000
-extraAttribute1: JimLange
 
 dn: uid=jlut2,ou=People,dc=example,dc=com
 objectClass: person
@@ -1893,7 +1798,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1123
 gidNumber: 1000
-extraAttribute1: JamesLutz
 
 dn: uid=jlutz,ou=People,dc=example,dc=com
 objectClass: person
@@ -1918,7 +1822,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1110
 gidNumber: 1000
-extraAttribute1: JanetLutz
 
 dn: uid=jmcFarla,ou=People,dc=example,dc=com
 objectClass: person
@@ -1943,7 +1846,6 @@ ou: Accounting
 ou: People
 uidNumber: 1021
 gidNumber: 1000
-extraAttribute1: JudyMcFarland
 
 dn: uid=jmuffly,ou=People,dc=example,dc=com
 objectClass: person
@@ -1968,7 +1870,6 @@ ou: Product Development
 ou: People
 uidNumber: 1104
 gidNumber: 1000
-extraAttribute1: JeffMuffly
 
 dn: uid=jrent2,ou=People,dc=example,dc=com
 objectClass: person
@@ -1993,7 +1894,6 @@ ou: Payroll
 ou: People
 uidNumber: 1127
 gidNumber: 1000
-extraAttribute1: JudyRentz
 
 dn: uid=jrentz,ou=People,dc=example,dc=com
 objectClass: person
@@ -2018,7 +1918,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1093
 gidNumber: 1000
-extraAttribute1: JodyRentz
 
 dn: uid=jreuter,ou=People,dc=example,dc=com
 objectClass: person
@@ -2043,7 +1942,6 @@ ou: Product Testing
 ou: People
 uidNumber: 1015
 gidNumber: 1000
-cn: Jayne Reuter
 
 dn: uid=jvaughan,ou=People,dc=example,dc=com
 objectClass: person
@@ -2068,7 +1966,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1138
 gidNumber: 1000
-cn: Jeff Vaughan
 
 dn: uid=jvedder,ou=People,dc=example,dc=com
 objectClass: person
@@ -2093,7 +1990,6 @@ ou: Product Development
 ou: People
 uidNumber: 1151
 gidNumber: 1000
-cn: Jeff Vedder
 
 dn: uid=jwalker,ou=People,dc=example,dc=com
 objectClass: person
@@ -2118,7 +2014,6 @@ ou: Product Testing
 ou: People
 uidNumber: 1012
 gidNumber: 1000
-extraAttribute1: JohnWalker
 
 dn: uid=jwallace,ou=People,dc=example,dc=com
 objectClass: person
@@ -2143,7 +2038,6 @@ ou: Accounting
 ou: People
 uidNumber: 1011
 gidNumber: 1000
-extraAttribute1: JudyWallace
 
 dn: uid=kcarter,ou=People,dc=example,dc=com
 objectClass: person
@@ -2168,7 +2062,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1072
 gidNumber: 1000
-extraAttribute1: KarenCarter
 
 dn: uid=kcope,ou=People,dc=example,dc=com
 objectClass: person
@@ -2193,7 +2086,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1118
 gidNumber: 1000
-extraAttribute1: KarlCope
 
 dn: uid=kjensen,ou=People,dc=example,dc=com
 objectClass: person
@@ -2218,7 +2110,6 @@ ou: Product Development
 ou: People
 uidNumber: 1039
 gidNumber: 1000
-extraAttribute1: KurtJensen
 
 dn: uid=kmcinnis,ou=People,dc=example,dc=com
 objectClass: person
@@ -2243,7 +2134,6 @@ ou: Accounting
 ou: People
 uidNumber: 1113
 gidNumber: 1000
-extraAttribute1: KellyMcinnis
 
 dn: uid=kschmith,ou=People,dc=example,dc=com
 objectClass: person
@@ -2268,7 +2158,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1096
 gidNumber: 1000
-extraAttribute1: KellySchmith
 
 dn: uid=kvaughan,ou=People,dc=example,dc=com
 objectClass: person
@@ -2293,7 +2182,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1004
 gidNumber: 1000
-extraAttribute1: KirstenVaughan
 
 dn: uid=kwinters,ou=People,dc=example,dc=com
 objectClass: person
@@ -2318,7 +2206,6 @@ ou: Product Development
 ou: People
 uidNumber: 1008
 gidNumber: 1000
-extraAttribute1: KellyWinters
 
 dn: uid=lcampbel,ou=People,dc=example,dc=com
 objectClass: person
@@ -2343,7 +2230,6 @@ ou: Accounting
 ou: People
 uidNumber: 1053
 gidNumber: 1000
-extraAttribute1: LaurelCampbell
 
 dn: uid=llabonte,ou=People,dc=example,dc=com
 objectClass: person
@@ -2368,7 +2254,6 @@ ou: Product Development
 ou: People
 uidNumber: 1022
 gidNumber: 1000
-extraAttribute1: LeeLabonte
 
 dn: uid=lrentz,ou=People,dc=example,dc=com
 objectClass: person
@@ -2393,7 +2278,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1137
 gidNumber: 1000
-extraAttribute1: LexRentz
 
 dn: uid=lstockto,ou=People,dc=example,dc=com
 objectClass: person
@@ -2418,7 +2302,6 @@ ou: Product Testing
 ou: People
 uidNumber: 1115
 gidNumber: 1000
-extraAttribute1: LeeStockton
 
 dn: uid=lulrich,ou=People,dc=example,dc=com
 objectClass: person
@@ -2443,7 +2326,6 @@ ou: Product Testing
 ou: People
 uidNumber: 1030
 gidNumber: 1000
-extraAttribute1: LeeUlrich
 
 dn: uid=mcarter,ou=People,dc=example,dc=com
 objectClass: person
@@ -2468,7 +2350,6 @@ ou: Accounting
 ou: People
 uidNumber: 1087
 gidNumber: 1000
-extraAttribute1: MikeCarter
 
 dn: uid=mjablons,ou=People,dc=example,dc=com
 objectClass: person
@@ -2493,7 +2374,6 @@ ou: Accounting
 ou: People
 uidNumber: 1124
 gidNumber: 1000
-extraAttribute1: MorganJablonski
 
 dn: uid=mlangdon,ou=People,dc=example,dc=com
 objectClass: person
@@ -2518,7 +2398,6 @@ ou: Product Development
 ou: People
 uidNumber: 1031
 gidNumber: 1000
-extraAttribute1: MarcusLangdon
 
 dn: uid=mlott,ou=People,dc=example,dc=com
 objectClass: person
@@ -2543,7 +2422,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1040
 gidNumber: 1000
-extraAttribute1: MikeLott
 
 dn: uid=mmcinnis,ou=People,dc=example,dc=com
 objectClass: person
@@ -2568,7 +2446,6 @@ ou: Product Development
 ou: People
 uidNumber: 1061
 gidNumber: 1000
-extraAttribute1: MarcusMcinnis
 
 dn: uid=mreuter,ou=People,dc=example,dc=com
 objectClass: person
@@ -2593,7 +2470,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1098
 gidNumber: 1000
-extraAttribute1: MatthewReuter
 
 dn: uid=mschneid,ou=People,dc=example,dc=com
 objectClass: person
@@ -2618,7 +2494,6 @@ ou: Accounting
 ou: People
 uidNumber: 1063
 gidNumber: 1000
-extraAttribute1: MartinSchneider
 
 dn: uid=mtalbot,ou=People,dc=example,dc=com
 objectClass: person
@@ -2643,7 +2518,6 @@ ou: Product Development
 ou: People
 uidNumber: 1084
 gidNumber: 1000
-extraAttribute1: MartinTalbot
 
 dn: uid=mtyler,ou=People,dc=example,dc=com
 objectClass: person
@@ -2668,7 +2542,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1148
 gidNumber: 1000
-extraAttribute1: MatthewTyler
 
 dn: uid=mvaughan,ou=People,dc=example,dc=com
 objectClass: person
@@ -2693,7 +2566,6 @@ ou: Product Testing
 ou: People
 uidNumber: 1122
 gidNumber: 1000
-extraAttribute1: MatthewVaughan
 
 dn: uid=mward,ou=People,dc=example,dc=com
 objectClass: person
@@ -2718,7 +2590,6 @@ ou: Accounting
 ou: People
 uidNumber: 1019
 gidNumber: 1000
-extraAttribute1: MarcusWard
 
 dn: uid=mwhite,ou=People,dc=example,dc=com
 objectClass: person
@@ -2743,7 +2614,6 @@ ou: Accounting
 ou: People
 uidNumber: 1080
 gidNumber: 1000
-extraAttribute1: MorganWhite
 
 dn: uid=pchassin,ou=People,dc=example,dc=com
 objectClass: person
@@ -2768,7 +2638,6 @@ ou: Payroll
 ou: People
 uidNumber: 1125
 gidNumber: 1000
-extraAttribute1: PeterChassin
 
 dn: uid=pcruse,ou=People,dc=example,dc=com
 objectClass: person
@@ -2793,7 +2662,6 @@ ou: Product Testing
 ou: People
 uidNumber: 1064
 gidNumber: 1000
-extraAttribute1: PatriciaCruse
 
 dn: uid=phun2,ou=People,dc=example,dc=com
 objectClass: person
@@ -2818,7 +2686,6 @@ ou: Product Development
 ou: People
 uidNumber: 1121
 gidNumber: 1000
-extraAttribute1: PeteHunt
 
 dn: uid=phunt,ou=People,dc=example,dc=com
 objectClass: person
@@ -2843,7 +2710,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1074
 gidNumber: 1000
-extraAttribute1: PhilipHunt
 
 dn: uid=plorig,ou=People,dc=example,dc=com
 objectClass: person
@@ -2868,7 +2734,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1094
 gidNumber: 1000
-extraAttribute1: PeterLorig
 
 dn: uid=polfield,ou=People,dc=example,dc=com
 objectClass: person
@@ -2893,7 +2758,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1135
 gidNumber: 1000
-extraAttribute1: PeterOlfield
 
 dn: uid=prigden,ou=People,dc=example,dc=com
 objectClass: person
@@ -2918,7 +2782,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1037
 gidNumber: 1000
-extraAttribute1: PeterRigden
 
 dn: uid=prose,ou=People,dc=example,dc=com
 objectClass: person
@@ -2943,7 +2806,6 @@ ou: Accounting
 ou: People
 uidNumber: 1058
 gidNumber: 1000
-extraAttribute1: PaulaRose
 
 dn: uid=pshelton,ou=People,dc=example,dc=com
 objectClass: person
@@ -2968,7 +2830,6 @@ ou: Payroll
 ou: People
 uidNumber: 1092
 gidNumber: 1000
-extraAttribute1: PatriciaShelton
 
 dn: uid=ptyler,ou=People,dc=example,dc=com
 objectClass: person
@@ -2993,7 +2854,6 @@ ou: Accounting
 ou: People
 uidNumber: 1069
 gidNumber: 1000
-extraAttribute1: PeteTyler
 
 dn: uid=pworrell,ou=People,dc=example,dc=com
 objectClass: person
@@ -3018,7 +2878,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1097
 gidNumber: 1000
-extraAttribute1: PeteWorrell
 
 dn: uid=rbannist,ou=People,dc=example,dc=com
 objectClass: person
@@ -3043,7 +2902,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1043
 gidNumber: 1000
-extraAttribute1: RichardBannister
 
 dn: uid=rdaugherty,ou=People,dc=example,dc=com
 objectClass: person
@@ -3068,7 +2926,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1014
 gidNumber: 1000
-extraAttribute1: RobertDaugherty
 
 dn: uid=rfish,ou=People,dc=example,dc=com
 objectClass: person
@@ -3093,7 +2950,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1073
 gidNumber: 1000
-extraAttribute1: RandyFish
 
 dn: uid=rfisher,ou=People,dc=example,dc=com
 objectClass: person
@@ -3118,7 +2974,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1132
 gidNumber: 1000
-extraAttribute1: RandyFisher
 
 dn: uid=rfrancis,ou=People,dc=example,dc=com
 objectClass: person
@@ -3143,7 +2998,6 @@ ou: Accounting
 ou: People
 uidNumber: 1079
 gidNumber: 1000
-extraAttribute1: RichardFrancis
 
 dn: uid=rhunt,ou=People,dc=example,dc=com
 objectClass: person
@@ -3168,7 +3022,6 @@ ou: Accounting
 ou: People
 uidNumber: 1145
 gidNumber: 1000
-extraAttribute1: RichardHunt
 
 dn: uid=rjense2,ou=People,dc=example,dc=com
 objectClass: person
@@ -3193,7 +3046,6 @@ ou: Product Testing
 ou: People
 uidNumber: 1144
 gidNumber: 1000
-extraAttribute1: RandyJensen
 
 dn: uid=rjensen,ou=People,dc=example,dc=com
 objectClass: person
@@ -3218,7 +3070,6 @@ ou: Accounting
 ou: People
 uidNumber: 1120
 gidNumber: 1000
-extraAttribute1: RichardJensen
 
 dn: uid=rmills,ou=People,dc=example,dc=com
 objectClass: person
@@ -3243,7 +3094,6 @@ ou: Accounting
 ou: People
 uidNumber: 1045
 gidNumber: 1000
-extraAttribute1: RandyMills
 
 dn: uid=rschneid,ou=People,dc=example,dc=com
 objectClass: person
@@ -3268,7 +3118,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1075
 gidNumber: 1000
-extraAttribute1: RachelSchneider
 
 dn: uid=rulrich,ou=People,dc=example,dc=com
 objectClass: person
@@ -3293,7 +3142,6 @@ ou: Accounting
 ou: People
 uidNumber: 1078
 gidNumber: 1000
-extraAttribute1: RandyUlrich
 
 dn: uid=scarte2,ou=People,dc=example,dc=com
 objectClass: person
@@ -3318,7 +3166,6 @@ ou: Product Development
 ou: People
 uidNumber: 1050
 gidNumber: 1000
-extraAttribute1: StephenCarter
 
 dn: uid=scarter,ou=People,dc=example,dc=com
 objectClass: person
@@ -3343,7 +3190,6 @@ ou: Accounting
 ou: People
 uidNumber: 1002
 gidNumber: 1000
-extraAttribute1: SamCarter
 
 dn: uid=sfarmer,ou=People,dc=example,dc=com
 objectClass: person
@@ -3368,7 +3214,6 @@ ou: Product Development
 ou: People
 uidNumber: 1089
 gidNumber: 1000
-extraAttribute1: ScottFarmer
 
 dn: uid=skellehe,ou=People,dc=example,dc=com
 objectClass: person
@@ -3393,7 +3238,6 @@ ou: Payroll
 ou: People
 uidNumber: 1047
 gidNumber: 1000
-extraAttribute1: SueKelleher
 
 dn: uid=slee,ou=People,dc=example,dc=com
 objectClass: person
@@ -3418,7 +3262,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1055
 gidNumber: 1000
-extraAttribute1: ScottLee
 
 dn: uid=smason,ou=People,dc=example,dc=com
 objectClass: person
@@ -3443,7 +3286,6 @@ ou: Product Development
 ou: People
 uidNumber: 1068
 gidNumber: 1000
-extraAttribute1: SueMason
 
 dn: uid=speterso,ou=People,dc=example,dc=com
 objectClass: person
@@ -3468,7 +3310,6 @@ ou: Product Development
 ou: People
 uidNumber: 1035
 gidNumber: 1000
-extraAttribute1: SuePeterson
 
 dn: uid=striplet,ou=People,dc=example,dc=com
 objectClass: person
@@ -3493,7 +3334,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1032
 gidNumber: 1000
-extraAttribute1: StephenTriplett
 
 dn: uid=tclow,ou=People,dc=example,dc=com
 objectClass: person
@@ -3518,7 +3358,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1013
 gidNumber: 1000
-extraAttribute1: TorreyClow
 
 dn: uid=tcouzens,ou=People,dc=example,dc=com
 objectClass: person
@@ -3543,7 +3382,6 @@ ou: Accounting
 ou: People
 uidNumber: 1114
 gidNumber: 1000
-extraAttribute1: TrentCouzens
 
 dn: uid=tcruse,ou=People,dc=example,dc=com
 objectClass: person
@@ -3568,7 +3406,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1128
 gidNumber: 1000
-extraAttribute1: TobiasCruse
 
 dn: uid=tjames,ou=People,dc=example,dc=com
 objectClass: person
@@ -3593,7 +3430,6 @@ ou: Accounting
 ou: People
 uidNumber: 1141
 gidNumber: 1000
-extraAttribute1: TobiasJames
 
 dn: uid=tjensen,ou=People,dc=example,dc=com
 objectClass: person
@@ -3618,7 +3454,6 @@ ou: Accounting
 ou: People
 uidNumber: 1105
 gidNumber: 1000
-extraAttribute1: TedJensen
 
 dn: uid=tkelly,ou=People,dc=example,dc=com
 objectClass: person
@@ -3642,7 +3477,6 @@ l: Santa Clara
 ou: Product Development
 uidNumber: 1065
 gidNumber: 1000
-extraAttribute1: TimothyKelly
 
 dn: uid=tlabonte,ou=People,dc=example,dc=com
 objectClass: person
@@ -3667,7 +3501,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1054
 gidNumber: 1000
-extraAttribute1: TimLabonte
 
 dn: uid=tmason,ou=People,dc=example,dc=com
 objectClass: person
@@ -3692,7 +3525,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1016
 gidNumber: 1000
-extraAttribute1: TorreyMason
 
 dn: uid=tmorris,ou=People,dc=example,dc=com
 objectClass: person
@@ -3717,7 +3549,6 @@ ou: Accounting
 ou: People
 uidNumber: 1003
 gidNumber: 1000
-extraAttribute1: TedMorris
 
 dn: uid=tpierce,ou=People,dc=example,dc=com
 objectClass: person
@@ -3742,7 +3573,6 @@ ou: Accounting
 ou: People
 uidNumber: 1042
 gidNumber: 1000
-extraAttribute1: TobiasPierce
 
 dn: uid=trigden,ou=People,dc=example,dc=com
 objectClass: person
@@ -3767,7 +3597,6 @@ ou: Product Development
 ou: People
 uidNumber: 1009
 gidNumber: 1000
-extraAttribute1: TorreyRigden
 
 dn: uid=tschmith,ou=People,dc=example,dc=com
 objectClass: person
@@ -3792,7 +3621,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1100
 gidNumber: 1000
-extraAttribute1: TobiasSchmith
 
 dn: uid=tschneid,ou=People,dc=example,dc=com
 objectClass: person
@@ -3817,7 +3645,6 @@ ou: Accounting
 ou: People
 uidNumber: 1057
 gidNumber: 1000
-extraAttribute1: TorreySchneider
 
 dn: uid=ttully,ou=People,dc=example,dc=com
 objectClass: person
@@ -3842,7 +3669,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1130
 gidNumber: 1000
-extraAttribute1: TorreyTully
 
 dn: uid=tward,ou=People,dc=example,dc=com
 objectClass: person
@@ -3867,7 +3693,6 @@ ou: Human Resources
 ou: People
 uidNumber: 1091
 gidNumber: 1000
-extraAttribute1: TobiasWard
 
 dn: uid=wlutz,ou=People,dc=example,dc=com
 objectClass: person
@@ -3892,7 +3717,6 @@ ou: Accounting
 ou: People
 uidNumber: 1109
 gidNumber: 1000
-extraAttribute1: WendyLutz
 
 dn: ou=Special Users,dc=example,dc=com
 objectClass: organizationalUnit

@@ -1,1 +1,3 @@
-ldapmodify -a -x -w secret -D "cn=Manager,dc=example,dc=com" -f Example1.ldif
+REM import LDAP directory from .ldif file
+
+ldapmodify -a -x -w secret -D "cn=Manager" -f Example2.ldif

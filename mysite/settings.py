@@ -144,7 +144,7 @@ IMPORT_LDAP_USER_SEARCH = LDAPSearchUnion(
 #    LDAPSearch("ou=otherusers,dc=example,dc=com", ldap.SCOPE_SUBTREE, (objectclass=person)),
 )
 # When importing LDAP accounts, configure the Perforce username from this attribute
-IMPORT_LDAP_ATTRIBUTE_CONTAINING_PERFORCE_USER_NAME = 'homedirectory'
+IMPORT_LDAP_ATTRIBUTE_CONTAINING_PERFORCE_USER_NAME = 'uid'
 
 
 # Perforce server configuration

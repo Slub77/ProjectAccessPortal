@@ -224,8 +224,8 @@ class TestP4Methods(unittest.TestCase):
 
     P4HOST = 'localhost'
     P4PORT = '1666'
-    P4USER = 'kalms.m'
-    P4PASSWORD = 'kalms.m'
+    P4USER = 'ProjectAccessServiceAccount'
+    P4PASSWORD = 'ProjectAccessServiceAccount'
 
     DEPOT_NAME = 'unittest_test_depot'
     USER_NAME = 'unittest_test_user'

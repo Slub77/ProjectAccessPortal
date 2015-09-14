@@ -70,6 +70,7 @@ class P4Connection(object):
 
         workspace = \
             'Client: ' + name + '\n\n' + \
+            'Options: noallwrite noclobber nocompress unlocked nomodtime rmdir' + '\n\n' + \
             'Root: ' + root + '\n\n' + \
             'View: ' + view_as_strings + '\n\n'
         logger.debug("Invoking P4 command: client -i")

@@ -143,7 +143,8 @@ LOGOUT_URL = '/projectaccess/logout/'
 PERFORCE = {
     'HOST' : 'localhost',
     'PORT' : '1666',
-    'SERVICE_USER' : 'kalms'
+    'SERVICE_USER' : 'kalms.m',
+    'SERVICE_PASSWORD' : 'kalms.m'
 }
 
 

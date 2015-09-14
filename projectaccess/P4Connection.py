@@ -12,11 +12,12 @@ logger = logging.getLogger(__name__)
 
 class P4Connection(object):
 
-    def __init__(self, host, port, user):
+    def __init__(self, host, port, user, password):
         self.p4 = P4()
         self.p4.host = host
         self.p4.port = port
         self.p4.user = user
+        self.p4.password = password
 
     def __enter__(self):
         logger.debug("Connecting to P4")
@@ -216,14 +217,15 @@ class p4_workspace():
 class P4ConnectionAsServiceUser(P4Connection):
 
     def __init__(self):
-        super(P4ConnectionAsServiceUser, self).__init__(settings.PERFORCE['HOST'], settings.PERFORCE['PORT'], settings.PERFORCE['SERVICE_USER'])
+        super(P4ConnectionAsServiceUser, self).__init__(settings.PERFORCE['HOST'], settings.PERFORCE['PORT'], settings.PERFORCE['SERVICE_USER'], settings.PERFORCE['SERVICE_PASSWORD'])
 
 
 class TestP4Methods(unittest.TestCase):
 
     P4HOST = 'localhost'
     P4PORT = '1666'
-    P4USER = 'kalms'
+    P4USER = 'kalms.m'
+    P4PASSWORD = 'kalms.m'
 
     DEPOT_NAME = 'unittest_test_depot'
     USER_NAME = 'unittest_test_user'
@@ -235,16 +237,16 @@ class TestP4Methods(unittest.TestCase):
     USER_FULL_NAME = 'Unittest Test User'
 
     def test_get_users(self):
-        with P4Connection(self.P4HOST, self.P4PORT, self.P4USER) as p4:
+        with P4Connection(self.P4HOST, self.P4PORT, self.P4USER, self.P4PASSWORD) as p4:
             p4.get_users()
 
     def test_p4_create_and_delete_user(self):
-        with P4Connection(self.P4HOST, self.P4PORT, self.P4USER) as p4:
+        with P4Connection(self.P4HOST, self.P4PORT, self.P4USER, self.P4PASSWORD) as p4:
             p4.create_user(self.USER_NAME, self.USER_EMAIL, self.USER_FULL_NAME)
             p4.delete_user(self.USER_NAME)
 
     def test_p4_create_and_delete_workspace(self):
-        with P4Connection(self.P4HOST, self.P4PORT, self.P4USER) as p4:
+        with P4Connection(self.P4HOST, self.P4PORT, self.P4USER, self.P4PASSWORD) as p4:
             p4.create_depot(self.DEPOT_NAME)
             try:
                 p4.create_workspace(self.WORKSPACE_NAME, '.', [('//%s/...' % self.DEPOT_NAME, '//%s/...' % self.WORKSPACE_NAME)])
@@ -254,7 +256,7 @@ class TestP4Methods(unittest.TestCase):
                 raise
 
     def test_p4_create_file(self):
-        with P4Connection(self.P4HOST, self.P4PORT, self.P4USER) as p4:
+        with P4Connection(self.P4HOST, self.P4PORT, self.P4USER, self.P4PASSWORD) as p4:
             p4.create_depot(self.DEPOT_NAME)
             try:
                 p4.import_local_file('requirements.txt', '//%s/subdir/unittest.txt' % self.DEPOT_NAME, "Testing file import")
@@ -265,7 +267,7 @@ class TestP4Methods(unittest.TestCase):
                 raise
 
     def test_p4_protect(self):
-        with P4Connection(self.P4HOST, self.P4PORT, self.P4USER) as p4:
+        with P4Connection(self.P4HOST, self.P4PORT, self.P4USER, self.P4PASSWORD) as p4:
 
             protect_line = "write user %s * //..." % self.USER_NAME
 
@@ -284,7 +286,7 @@ class TestP4Methods(unittest.TestCase):
 
     def test_p4_groups_1(self):
 
-        with P4Connection(self.P4HOST, self.P4PORT, self.P4USER) as p4:
+        with P4Connection(self.P4HOST, self.P4PORT, self.P4USER, self.P4PASSWORD) as p4:
 
             p4.create_user(self.USER_NAME, self.USER_EMAIL, self.USER_FULL_NAME)
             try:
@@ -318,7 +320,7 @@ class TestP4Methods(unittest.TestCase):
 
     def test_p4_groups_2(self):
 
-        with P4Connection(self.P4HOST, self.P4PORT, self.P4USER) as p4:
+        with P4Connection(self.P4HOST, self.P4PORT, self.P4USER, self.P4PASSWORD) as p4:
 
             p4.create_user(self.USER_NAME, self.USER_EMAIL, self.USER_FULL_NAME)
             try:

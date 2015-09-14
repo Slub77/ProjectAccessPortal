@@ -23,6 +23,8 @@ suffix		"dc=example,dc=com"
 
 rootdn		"cn=Manager,dc=example,dc=com"
 
+After changing the config file, restart the OpenLDAP service using the "Services" manager in Windows.
+
 Ensure that c:\Program Files\OpenLDAP\Client Tools is in your path.
 
 #### Python

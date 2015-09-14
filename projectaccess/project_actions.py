@@ -1,4 +1,6 @@
 
+from django.conf import settings
+
 from P4Connection import P4ConnectionAsServiceUser
 from models import PAUser, PAProject, PAUserProjectAccess, PAGroupProjectAccess
 
@@ -32,8 +34,8 @@ def remove_p4_protection_line(p4, p4_protection_line):
 
 def create_new_project(project_name):
 
-    p4_path = '//Projects2/%s' % project_name
-    p4_access_group_name = 'Projects2-%s-ReadWrite' % project_name
+    p4_path = '%s/%s' % (settings.PERFORCE_PROJECT_DEPOT_LOCATION, project_name)
+    p4_access_group_name = '%s-%s-ReadWrite' % (settings.PERFORCE_PROJECT_GROUP_PREFIX, project_name)
 
     project = PAProject.objects.create(name=project_name, p4_path=p4_path, p4_access_group_name=p4_access_group_name)
 

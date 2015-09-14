@@ -156,6 +156,14 @@ PERFORCE = {
     'SERVICE_PASSWORD' : 'ProjectAccessServiceAccount'
 }
 
+# Depot location for projects; this can be either the name of a depot or a subdirectory in a depot
+# Full path will be <depot location>/<project name>/...
+PERFORCE_PROJECT_DEPOT_LOCATION = '//Projects'
+
+# Prefix for access groups pertaining to a project
+# Full access group name will be <prefix>-<project name>-<access type>
+PERFORCE_PROJECT_GROUP_PREFIX = 'Projects'
+
 
 # Logging configuration
 

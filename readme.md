@@ -61,3 +61,4 @@ Update the list of new users from LDAP into the Django project: `python manage.p
 
 Start the webservice: `python manage.py runserver` [docs](https://docs.djangoproject.com/en/1.8/ref/django-admin/)
 
+To see the site, visit the URL `localhost:8000/projectaccess/` in your browser.

@@ -32,6 +32,19 @@ def remove_p4_protection_line(p4, p4_protection_line):
 
     p4.write_protect(protections)
 
+def create_project_standard_files_in_p4(p4, project_root):
+
+    file_name = 'readme.txt'
+    local_root = 'WorkspaceTemplates/NewProject'
+    local_file = '%s/%s' % (local_root, file_name)
+    depot_file = '%s/%s' % (project_root, file_name)
+
+    p4.import_local_file(local_file, depot_file, 'Setting up project-area in %s' % project_root)
+
+def delete_project_standard_files_in_p4(p4, p4_path):
+    # TODO implement
+    pass
+
 def create_new_project(project_name):
 
     p4_path = '%s/%s' % (settings.PERFORCE_PROJECT_DEPOT_LOCATION, project_name)
@@ -42,6 +55,7 @@ def create_new_project(project_name):
     with P4ConnectionAsServiceUser() as p4:
 
         add_p4_protection_line(p4, construct_protection_line(p4_path, p4_access_group_name))
+        create_project_standard_files_in_p4(p4, p4_path)
 
     return project
 
@@ -57,6 +71,8 @@ def delete_project(project):
             p4.delete_group(project.p4_access_group_name)
         except:
             pass
+
+        delete_project_standard_files_in_p4(p4, project.p4_path)
 
     project.delete()
 

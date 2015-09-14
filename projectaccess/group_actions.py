@@ -33,7 +33,7 @@ def add_user_to_group(group, user):
 
         group.members.add(user)
         group.save()
-        p4.add_user_to_group(str(group.name), str(user.name))
+        p4.add_user_to_group(str(group.name), str(user.p4_user_name))
 
 def remove_user_from_group(group, user):
 
@@ -41,4 +41,4 @@ def remove_user_from_group(group, user):
 
         group.members.remove(user)
         group.save()
-        p4.remove_user_from_group(str(group.name), str(user.name))
+        p4.remove_user_from_group(str(group.name), str(user.p4_user_name))

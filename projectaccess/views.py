@@ -14,31 +14,6 @@ logger = logging.getLogger(__name__)
 
 def login_user(request):
 
-    def create_user_profile(user):
-        print str(user.ldap_user.attrs)
-
-        try:
-            user_profile = UserProfile.objects.get(user=user)
-        except:
-            user_profile = UserProfile.objects.create(user=user)
-            user_profile.save()
-        return user_profile
-
-    def initialize_user_p4_name(user_profile, ldap_attrs, ldap_attr_name):
-#            if not user_profile.p4_name:
-                if ldap_attr_name in ldap_attrs:
-                    user_profile.p4_username = ldap_attrs[ldap_attr_name][0]
-                    user_profile.save()
-
-    def p4_user_exists(user):
-        with P4ConnectionAsServiceUser() as p4:
-            try:
-                print user
-                p4.get_user(user.name)
-                return True
-            except:
-                return False
-
     logout(request)
     username = password = ''
     if request.POST:
@@ -50,12 +25,7 @@ def login_user(request):
             logger.info("user is not None")
             if user.is_active:
                 login(request, user)
-                user_profile = create_user_profile(user)
-                initialize_user_p4_name(user_profile, user.ldap_user.attrs, 'homeDirectory')
-                if not p4_user_exists(user):
-                    return HttpResponseRedirect('/projectaccess/user/')
-                else:
-                    return HttpResponseRedirect('/projectaccess/')
+                return HttpResponseRedirect('/projectaccess/user/')
     return render_to_response('login.html', context_instance=RequestContext(request))
 
 def logout_user(request):
@@ -84,7 +54,9 @@ def users(request):
 def user(request):
 
     template = loader.get_template('user.html')
-    context = RequestContext(request)
+    context = RequestContext(request, {
+        'pa_user': PAUser.objects.get(name=request.user.username),
+    })
 
     return HttpResponse(template.render(context))
 
@@ -145,14 +117,6 @@ def projects(request):
     })
 
     return HttpResponse(template.render(context))
-
-@login_required
-def import_p4_users(request):
-
-    from p4_import import import_p4_to_django
-    import_p4_to_django()
-
-    return users(request)
 
 @login_required
 def create_new_project(request):

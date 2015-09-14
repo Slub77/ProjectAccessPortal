@@ -2,8 +2,6 @@ from django.db import models
 
 from django.contrib.auth.models import User
 
-# Create your models here.
-
 # Example of an LDAP user entry (this has been extracted from an example .ldif file)
 #
 ## rdaugherty, People, example.com
@@ -29,33 +27,24 @@ from django.contrib.auth.models import User
 # uidNumber: 1014
 # gidNumber: 1000
 
-class LDAPUser(models.Model):
-    dn = models.CharField("Distinguished Name", max_length=1024)	# dn: uid=rdaugherty,ou=People,dc=example,dc=com
-    uid = models.CharField("User ID", max_length=256)		# uid: rdaugherty
-    cn = models.CharField("Canonical Name", max_length=1024)	# cn: Robert Daugherty
-    mail = models.CharField("E-Mail", max_length=1024)		# mail: rdaugherty@example.com
-
-
-## Example of a P4 user specification
-##
-## User: rdaugherty
-##
-## Email: rdaugherty@example.com
-##
-## FullName: Robeert Daugherty
+# Example of a P4 user specification
 #
+# User: rdaugherty
 #
-#class P4User(models.Model):
-#	user = models.CharField("User", max_length=1024)			# example: rdaugherty
-#	email = models.CharField("E-Mail", max_length=1024)			# example: rdaugherty@example.com
-#	full_name = models.CharField("Full Name", max_length=1024)	# example: Robert Daugherty
-
-class UserProfile(models.Model):
-    user = models.OneToOneField(User)
-    p4_user_name = models.CharField("Name", max_length=1024)
+# Email: rdaugherty@example.com
+#
+# FullName: Robeert Daugherty
 
 class PAUser(models.Model):
     name = models.CharField("Name", max_length=1024)
+    p4_user_name = models.CharField("P4UserName", max_length=1024)
+
+class LDAPUser(models.Model):
+    dn = models.CharField("dn", max_length=1024)
+    pa_user = models.OneToOneField(PAUser, null=True)
+
+class UserProfile(models.Model):
+    pa_user = models.OneToOneField(PAUser, null=True)
 
 class PAGroup(models.Model):
     name = models.CharField("Name", max_length=1024)

@@ -128,14 +128,23 @@ AUTH_LDAP_GROUP_SEARCH = LDAPSearch("ou=groups,dc=example,dc=com",
 AUTH_LDAP_GROUP_TYPE = GroupOfUniqueNamesType()
 
 # Only users which are members of this group are allowed to log in
-AUTH_LDAP_REQUIRE_GROUP = 'cn=Accounting Managers,ou=groups,dc=example,dc=com'
-
+#AUTH_LDAP_REQUIRE_GROUP = 'cn=Product Testing,ou=groups,dc=example,dc=com'
 
 # Talk with LDAP over SSL if possible
 #AUTH_LDAP_START_TLS = True
 
 LOGIN_URL = '/projectaccess/login/'
 LOGOUT_URL = '/projectaccess/logout/'
+
+
+
+# LDAP import will import the accounts below
+IMPORT_LDAP_USER_SEARCH = LDAPSearchUnion(
+    LDAPSearch("ou=People,dc=example,dc=com", ldap.SCOPE_SUBTREE, "(objectclass=person)")
+#    LDAPSearch("ou=otherusers,dc=example,dc=com", ldap.SCOPE_SUBTREE, (objectclass=person)),
+)
+# When importing LDAP accounts, configure the Perforce username from this attribute
+IMPORT_LDAP_ATTRIBUTE_CONTAINING_PERFORCE_USER_NAME = 'homedirectory'
 
 
 # Perforce server configuration

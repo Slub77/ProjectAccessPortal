@@ -54,6 +54,7 @@ class PAProject(models.Model):
     name = models.CharField("Name", max_length=1024)
     p4_path = models.CharField("P4Path", max_length=1024)
     p4_access_group_name = models.CharField("P4AccessGroupName", max_length=1024)
+    p4_template_workspace = models.CharField("P4TemplateWorkspace", max_length=1024)
     # TODO: add support for giving groups access
 
 class PAUserProjectAccess(models.Model):

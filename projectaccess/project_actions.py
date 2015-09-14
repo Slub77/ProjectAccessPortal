@@ -45,17 +45,31 @@ def delete_project_standard_files_in_p4(p4, p4_path):
     # TODO implement
     pass
 
+def create_template_workspace_in_p4(p4, p4_template_workspace, p4_path):
+
+    (p4_depot_without_leading_slashes, p4_subpath) = p4_path[2:].split('/', 1)
+
+    depot_path = '%s/...' % p4_path
+    workspace_path = '//%s/%s/...' % (p4_template_workspace, p4_subpath)
+    p4.create_workspace(p4_template_workspace, '.', [(depot_path, workspace_path)])
+
+def delete_template_workspace_in_p4(p4, p4_template_workspace):
+    p4.delete_workspace(p4_template_workspace)
+
 def create_new_project(project_name):
 
     p4_path = '%s/%s' % (settings.PERFORCE_PROJECT_DEPOT_LOCATION, project_name)
     p4_access_group_name = '%s-%s-ReadWrite' % (settings.PERFORCE_PROJECT_GROUP_PREFIX, project_name)
+    p4_template_workspace = '%s-%s-template' % (settings.PERFORCE_PROJECT_GROUP_PREFIX, project_name)
 
-    project = PAProject.objects.create(name=project_name, p4_path=p4_path, p4_access_group_name=p4_access_group_name)
+    project = PAProject.objects.create(name=project_name, p4_path=p4_path, p4_access_group_name=p4_access_group_name,
+                                       p4_template_workspace=p4_template_workspace)
 
     with P4ConnectionAsServiceUser() as p4:
 
         add_p4_protection_line(p4, construct_protection_line(p4_path, p4_access_group_name))
         create_project_standard_files_in_p4(p4, p4_path)
+        create_template_workspace_in_p4(p4, p4_template_workspace, p4_path)
 
     return project
 
@@ -73,6 +87,8 @@ def delete_project(project):
             pass
 
         delete_project_standard_files_in_p4(p4, project.p4_path)
+        if project.p4_template_workspace:
+            delete_template_workspace_in_p4(p4, project.p4_template_workspace)
 
     project.delete()
 

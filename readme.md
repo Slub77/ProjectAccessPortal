@@ -11,7 +11,7 @@ It allows certain people to define new project areas, and add/remove members thr
 
 Install the Helix Versioning Engine (P4D), Visual Client (P4V), Command-Line (P4) and Helix Administration Tool (P4Admin) from http://www.perforce.com/downloads/helix .
 
-Using P4Admin, in the "Users & Groups" tab, ensure there is a user named 'kalms'. Then, in the "Permissions" tab, ensure that there is a row that gives the user 'kalms' super-level access to all depots.
+Using P4Admin, in the "Users & Groups" tab, ensure there is a user named 'ProjectAccessServiceAccount' with password 'ProjectAccessServiceAccount'. Then, in the "Permissions" tab, ensure that there is a row that gives the user 'ProjectAccessServiceAccount' super-level access to all depots.
 
 #### OpenLDAP
 

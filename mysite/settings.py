@@ -152,8 +152,8 @@ IMPORT_LDAP_ATTRIBUTE_CONTAINING_PERFORCE_USER_NAME = 'uid'
 PERFORCE = {
     'HOST' : 'localhost',
     'PORT' : '1666',
-    'SERVICE_USER' : 'kalms.m',
-    'SERVICE_PASSWORD' : 'kalms.m'
+    'SERVICE_USER' : 'ProjectAccessServiceAccount',
+    'SERVICE_PASSWORD' : 'ProjectAccessServiceAccount'
 }
 
 

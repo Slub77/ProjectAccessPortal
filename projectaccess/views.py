@@ -93,12 +93,12 @@ def projects(request):
             project_id = request.POST['project_id']
             name = request.POST['name']
             pa_project = PAProject.objects.get(id=project_id)
-#            try:
-            pa_user = PAUser.objects.get(name=name)
-            add_user_to_project(pa_project, pa_user)
-#            except:
-#                pa_group = PAGroup.objects.get(name=name)
-#                add_group_to_project(pa_project, pa_group)
+            try:
+                pa_user = PAUser.objects.get(name=name)
+                add_user_to_project(pa_project, pa_user)
+            except:
+                pa_group = PAGroup.objects.get(name=name)
+                add_group_to_project(pa_project, pa_group)
 
         elif request.POST['action'] == 'remove_user':
             project_access_id = request.POST['user_with_access_id']

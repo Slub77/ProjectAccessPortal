@@ -50,7 +50,7 @@
                     {% for user_with_access in project.pauserprojectaccess_set.all %}
 
                         <tr>
-                            <td> {{ user_with_access.user.name }} </td>
+                            <td> {{ user_with_access.user.name }} ({{user_with_access.user.display_name}}) </td>
 
                             <td>
                                 <form action="{% url 'projectaccess:projects' %}" method="post">

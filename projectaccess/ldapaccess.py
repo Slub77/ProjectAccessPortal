@@ -3,10 +3,23 @@ from django.conf import settings
 
 import ldap
 
+import logging
+logger = logging.getLogger(__name__)
+
 def retrieve_users_from_ldap_server():
     ldap_connection = ldap.initialize(settings.AUTH_LDAP_SERVER_URI)
-    ldap_search = settings.IMPORT_LDAP_USER_SEARCH
-    people = ldap_search.execute(ldap_connection)
+    ldap_connection.protocol_version = 3
+    ldap_connection.simple_bind_s(settings.AUTH_LDAP_BIND_DN, settings.AUTH_LDAP_BIND_PASSWORD)
+
+    people = []
+
+    for base, scope, filterstr in settings.IMPORT_LDAP_USER_SCOPES:
+        new_people = ldap_connection.search_s(base=base, scope=scope, filterstr=filterstr)
+        logger.debug("LDAP search of %s returned %d results" % (base, len(new_people)))
+        for new_person in new_people:
+            if not new_person in people:
+                people.append(new_person)
+
     return people
 
 def retrieve_users_from_ldif_file():

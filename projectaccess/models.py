@@ -38,6 +38,7 @@ from django.contrib.auth.models import User
 class PAUser(models.Model):
     name = models.CharField("Name", max_length=1024)
     p4_user_name = models.CharField("P4UserName", max_length=1024)
+    display_name = models.CharField("DisplayName", max_length=1024)
 
 class LDAPUser(models.Model):
     dn = models.CharField("dn", max_length=1024)

@@ -103,10 +103,21 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
+
+# If true:
+#   User import and user authentication is done against the LDAP server specified below
+# If false:
+#   User import is done against an .ldif file
+#
+# NOTE you should also change the AUTHENTICATION_BACKENDS setting appropriately
+
+LDAP_IMPORT_USERS_FROM_SERVER = True
+
 # Authentication settings
 
 AUTHENTICATION_BACKENDS = [
-    'django_auth_ldap.backend.LDAPBackend'
+    'django_auth_ldap.backend.LDAPBackend'       # Use this when authenticating against a real LDAP server
+#    'django.contrib.auth.backends.ModelBackend'  # Use this when authenticating against a local LDIF file
 ]
 
 AUTH_LDAP_SERVER_URI = 'ldap://localhost'

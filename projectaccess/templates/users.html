@@ -10,7 +10,9 @@
         <thead>
 
             <tr>
-                <td>Name</td>
+                <td>LDAP login & portal ID</td>
+                <td>User name</td>
+                <td>P4 login</td>
             </tr>
 
         </thead>
@@ -19,7 +21,9 @@
 
             {% for user in users %}
                 <tr>
-                    <td> {{ user.name }} <td>
+                    <td> {{ user.name }} </td>
+                    <td> {{ user.display_name }} </td>
+                    <td> {{ user.p4_user_name }} <td>
                 </tr>
             {% endfor %}
 

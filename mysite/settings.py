@@ -197,6 +197,11 @@ LOGGING = {
             'propagate': True,
             'level':'INFO',
         },
+        'django_auth_ldap': {
+            'handlers':['console'],
+            'propagate': True,
+            'level':'DEBUG',
+        },
         'projectaccess': {
             'handlers':['console'],
             'propagate': True,

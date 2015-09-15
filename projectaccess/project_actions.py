@@ -65,30 +65,32 @@ def create_new_project(project_name):
     project = PAProject.objects.create(name=project_name, p4_path=p4_path, p4_access_group_name=p4_access_group_name,
                                        p4_template_workspace=p4_template_workspace)
 
-    with P4ConnectionAsServiceUser() as p4:
+    if settings.PERFORCE_INTEGRATION_ENABLED:
+        with P4ConnectionAsServiceUser() as p4:
 
-        add_p4_protection_line(p4, construct_protection_line(p4_path, p4_access_group_name))
-        create_project_standard_files_in_p4(p4, p4_path)
-        create_template_workspace_in_p4(p4, p4_template_workspace, p4_path)
+            add_p4_protection_line(p4, construct_protection_line(p4_path, p4_access_group_name))
+            create_project_standard_files_in_p4(p4, p4_path)
+            create_template_workspace_in_p4(p4, p4_template_workspace, p4_path)
 
     return project
 
 def delete_project(project):
 
-    with P4ConnectionAsServiceUser() as p4:
+    if settings.PERFORCE_INTEGRATION_ENABLED:
+        with P4ConnectionAsServiceUser() as p4:
 
-        remove_p4_protection_line(p4, construct_protection_line(project.p4_path, project.p4_access_group_name))
+            remove_p4_protection_line(p4, construct_protection_line(project.p4_path, project.p4_access_group_name))
 
-        # Delete group in P4
-        # TODO: perhaps check for group existence before deleting? That will allow for ignoring a narrower range of exceptions
-        try:
-            p4.delete_group(project.p4_access_group_name)
-        except:
-            pass
+            # Delete group in P4
+            # TODO: perhaps check for group existence before deleting? That will allow for ignoring a narrower range of exceptions
+            try:
+                p4.delete_group(project.p4_access_group_name)
+            except:
+                pass
 
-        delete_project_standard_files_in_p4(p4, project.p4_path)
-        if project.p4_template_workspace:
-            delete_template_workspace_in_p4(p4, project.p4_template_workspace)
+            delete_project_standard_files_in_p4(p4, project.p4_path)
+            if project.p4_template_workspace:
+                delete_template_workspace_in_p4(p4, project.p4_template_workspace)
 
     project.delete()
 
@@ -96,32 +98,37 @@ def delete_project(project):
 
 def add_user_to_project(project, user):
 
-    with P4ConnectionAsServiceUser() as p4:
+    project_access = PAUserProjectAccess.objects.create(project=project, user=user)
+    project_access.save()
+    if settings.PERFORCE_INTEGRATION_ENABLED:
+        with P4ConnectionAsServiceUser() as p4:
+            p4.add_user_to_group(project.p4_access_group_name, str(user.p4_user_name))
 
-        project_access = PAUserProjectAccess.objects.create(project=project, user=user)
-        project_access.save()
-        p4.add_user_to_group(project.p4_access_group_name, str(user.p4_user_name))
-        return project_access
+    return project_access
 
 def remove_user_from_project(project_access):
 
-    with P4ConnectionAsServiceUser() as p4:
+    if settings.PERFORCE_INTEGRATION_ENABLED:
+        with P4ConnectionAsServiceUser() as p4:
+            p4.remove_user_from_group(project_access.project.p4_access_group_name, project_access.user.p4_user_name)
 
-        p4.remove_user_from_group(project_access.project.p4_access_group_name, project_access.user.p4_user_name)
-        project_access.delete()
+    project_access.delete()
 
 def add_group_to_project(project, group):
 
-    with P4ConnectionAsServiceUser() as p4:
+    project_access = PAGroupProjectAccess.objects.create(project=project, group=group)
+    project_access.save()
 
-        project_access = PAGroupProjectAccess.objects.create(project=project, group=group)
-        project_access.save()
-        p4.add_subgroup_to_group(project.p4_access_group_name, str(group.name))
-        return project_access
+    if settings.PERFORCE_INTEGRATION_ENABLED:
+        with P4ConnectionAsServiceUser() as p4:
+            p4.add_subgroup_to_group(project.p4_access_group_name, str(group.name))
+
+    return project_access
 
 def remove_group_from_project(project_access):
 
-    with P4ConnectionAsServiceUser() as p4:
+    if settings.PERFORCE_INTEGRATION_ENABLED:
+        with P4ConnectionAsServiceUser() as p4:
+            p4.remove_subgroup_from_group(project_access.project.p4_access_group_name, project_access.group.name)
 
-        p4.remove_subgroup_from_group(project_access.project.p4_access_group_name, project_access.group.name)
-        project_access.delete()
+    project_access.delete()

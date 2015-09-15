@@ -149,6 +149,8 @@ IMPORT_LDAP_ATTRIBUTE_CONTAINING_PERFORCE_USER_NAME = 'uid'
 
 # Perforce server configuration
 
+PERFORCE_INTEGRATION_ENABLED = True
+
 PERFORCE = {
     'HOST' : 'localhost',
     'PORT' : '1666',
